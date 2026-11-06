@@ -188,8 +188,10 @@ input:not([type=range]),select{background:#fff;color:var(--tx);border:2px solid 
 <button class="bt grande" id="lloc">Jogar sem salvar online</button></div><p id="lerr" style="color:#701010;min-height:16px"></p>
 <small>Se o usuário não existir, ele é criado com essa senha. O login fica salvo neste aparelho.</small></div></div>
 <button id="b-mus" class="bt win" hidden style="left:50%;bottom:130px;transform:translateX(-50%);z-index:20">🚪 Entrar no museu</button>
+<button id="b-torre" class="bt win" hidden style="left:50%;bottom:180px;transform:translateX(-50%);z-index:20">⬆ Subir na torre</button>
 <button id="b-jipe" class="bt win" hidden style="left:10px;bottom:130px;z-index:20">🚙 Sair do jipe</button>
 <button id="b-vsair" class="bt win" hidden style="right:10px;top:10px;z-index:20">◄ Sair da visita</button>
+<button id="b-vjog" class="bt win" hidden style="right:10px;top:60px;z-index:20">🚶 Modo Jogador</button>
 <div id="fpop" class="win" hidden style="left:50%;bottom:140px;transform:translateX(-50%);z-index:71;text-align:center"><img id="fimg" alt="foto" style="height:90px;display:block;margin:4px auto"><button class="bt peq" id="f-salvar">💾 Salvar</button><button class="bt peq" id="f-comp">📤 Compartilhar</button><button class="bt peq" id="f-x">✖</button></div>
 <div id="aviso">⟲ Gire o aparelho para a horizontal</div>
 
@@ -319,6 +321,8 @@ const CONSTR=[
  {id:'lab',cat:'ciencia',nome:'Laboratório de DNA',w:8,d:6,h:5,c:0x3f6a64,tec:1,custo:2500},
  {id:'incubacao',cat:'ciencia',nome:'Incubadora',w:5,d:5,h:4.5,c:0x56706a,tec:1,custo:1800},
  {id:'museu',cat:'ciencia',nome:'Museu de Fósseis',w:12,d:8,h:6,c:0x8a6a45,t:0x4a3624,museu:1,custo:1000},
+ {id:'veterinario',cat:'ciencia',nome:'Posto Veterinário',w:4,d:4,h:3.6,c:0xe8efe9,t:0xc83a3a,vet:1,custo:900},
+ {id:'boasvindas',cat:'eco',nome:'Centro de Boas-vindas',w:6,d:5,h:4.2,boasv:1,custo:1000},
  {id:'portao',cat:'eco',nome:'Portão Principal',w:8,d:4,h:6,portao:1,custo:200},
  {id:'comida',cat:'eco',nome:'Lanchonete de Hambúrguer',w:3,d:3,h:3,c:0x8a6a3a,t:0x9a4a2a,custo:320},
  {id:'sorvete',cat:'eco',nome:'Sorveteria e Sucos',w:3,d:3,h:3.4,c:0x6ac0e0,t:0xf08ab8,custo:300},
@@ -333,6 +337,7 @@ const CONSTR=[
  {id:'estacao',cat:'log',nome:'Monotrilho (estação)',w:4,d:8,h:6.7,c:0x9aa4ae,estacao:1,custo:850},
  {id:'mono',cat:'log',nome:'Monotrilho (trecho)',w:1,d:1,h:4.4,mono:1,custo:15},
  {id:'jipe',cat:'log',nome:'Jipe (sobre o monotrilho)',w:1,d:1,h:1.8,jipe:1,custo:350},
+ {id:'rampa',cat:'log',nome:'Rampa do monotrilho',w:1,d:4,h:4.4,rampa:1,custo:150},
  {id:'caminho',cat:'dec',nome:'Caminho',w:1,d:1,h:.1,path:1,custo:5},
  {id:'caminhoP',cat:'dec',nome:'Caminho de pedra',w:1,d:1,h:.1,path:1,custo:5},
  {id:'luz',cat:'dec',nome:'Luz',w:1,d:1,h:6.7,luz:1,custo:8},
@@ -359,7 +364,7 @@ const CONSTR=[
 ];
 const EP=t=>t==='caminho'||t==='caminhoP';
 const FOODS=['comida','sorvete','cachorro'],DECOR=CONSTR.filter(b=>b.cat==='dec'&&!b.path&&!b.cadeira).map(b=>b.id),
- DOORB=['pesquisa','lab','incubacao','museu','portao','comida','sorvete','cachorro','lembranca','banheiro_m','banheiro_f','torre','heli','seguranca','gerador','estacao'];
+ DOORB=['pesquisa','lab','incubacao','museu','portao','comida','sorvete','cachorro','lembranca','banheiro_m','banheiro_f','torre','heli','seguranca','gerador','estacao','veterinario','boasvindas'];
 
 // ---- Bases genéticas modernas (cada classificação aceita só a sua)
 const BASES=[
@@ -402,17 +407,18 @@ function espDe(r){if(!r.hib)return ESP.find(e=>e.id===r.sp);const a=ESP.find(e=>
 // ---- Configurações de economia e progressão (Passo 3) — tudo ajustável aqui
 const DIA_SEG=1200;                                   // duração do dia: 20 minutos
 const VIS_DIA=[60,90,130,180,240,320,420,540,680,840,1000]; // visitantes/dia por nível do parque (índice 0 = antes do nível 1)
-const PONTOS_NV=[100,250,450,700,1000,1350,1750,2200,2700,3250]; // pontos acumulados por nível (não são gastos)
+const PONTOS_NV=[110,270,490,770,1100,1480,1920,2410,2960,3560]; // pontos acumulados por nível (não são gastos)
 const NOMES_NV=['Projeto Pioneiro','Parque em Formação','A Grande Descoberta','Parque Consolidado','Maravilha Pré-Histórica','Complexo Científico','Santuário dos Gigantes','Potência Paleontológica','Império Pré-Histórico','Legado da Era dos Gigantes'];
 const GER_POR_NIVEL=[1,1,2,2,3,3,4,4,5,5,5];          // nível genético liberado em cada nível do parque (índice = nível)
 const CUSTO_PESQ=[200,400,700,1100,1600],CUSTO_INC=[150,250,400,600,850],CUSTO_PESQ_MOD=1000,CUSTO_INC_MOD=1200;
 
 // ---- Clima, crises e manutenção (Passo 4) — valores base ajustáveis
-const CLIMA_CFG={noite:{chuva:.5,tempestade:.2},dia:{chuva:.1},rolagem:300}; // chances por sorteio; rolagem = segundos de jogo entre sorteios
+const CLIMA_CFG={noite:{tempestade:.30,chuva:.55},dia:{tempestade:.20,chuva:.40},rolagem:300}; // tempestade = chance de sorteio; chuva = chance acumulada de qualquer chuva (inclui tempestade) // chances por sorteio; rolagem = segundos de jogo entre sorteios
 const CLIMA_VAL=[0,.3,.5,.75,1];                                               // limpo, nublado, chuva, chuva forte, tempestade
 const MANUT_CFG={intervalo:2400,carenciaApos:180,escalaApos:600};            // ~1 problema a cada 40 min de jogo ativo
-const CRISE_CFG={nivelMin:3,chanceAbaixoNivel:.25,pSeg:.003,espera:240,holdMin:6,holdMax:8};
-const GER_CERCAS=400,GER_CONS=5,ENERGIA_USA=['pesquisa','lab','incubacao','museu','comida','sorvete','cachorro','lembranca','banheiro_m','banheiro_f','torre','seguranca','estacao'];
+const CRISE_CFG={nivelMin:3,chanceAbaixoNivel:.25,pSeg:.003,espera:180,holdMin:6,holdMax:8};
+const MAN_DINO=[30,70,120,180,240],MAN_VET=60,CURA_DINO=[40,80,120,170,220]; // manutenção diária por dinossauro (nível 1 a 5), do posto veterinário, e custo de cura
+const GER_CERCAS=400,GER_CONS=5,ENERGIA_USA=['pesquisa','lab','incubacao','museu','comida','sorvete','cachorro','lembranca','banheiro_m','banheiro_f','torre','seguranca','estacao','veterinario'];
 
 </script>
 <script>
@@ -648,7 +654,7 @@ const Mundo={on:false,modo:'girar',
   const n=Math.max(1-d,.55*s);
   this.luzes(n,dt);if(Grade.glow)Grade.glow.emissiveIntensity=.08+(typeof Jogo!=='undefined'&&Jogo.en?1.8*n:0);
   const o=this.o;
-  this.rain.visible=cl>.42;
+  this.rain.visible=cl>.38;
   if(this.rain.visible){this.rain.material.opacity=.12+.3*cl;this.rain.position.set(o.t.x,0,o.t.z);const q=this.rp,v=(40+40*cl)*dt;
    for(let i=1;i<q.length;i+=3){q[i]-=v;if(i%6===1&&q[i]<0){q[i]+=70;q[i+3]+=70}}this.rain.geometry.attributes.position.needsUpdate=true}
   if((this.wf=(this.wf||0)+1)%3===0){const wp=this.wp,t=performance.now()*.001,nw=wp.count,AW=wp.array;if(!this.wxz){const q=new Float32Array(nw*2);for(let i=0;i<nw;i++){q[2*i]=wp.getX(i);q[2*i+1]=wp.getZ(i)}this.wxz=q}const xz=this.wxz;for(let i=0;i<nw;i++)AW[i*3+1]=-1.2+Math.sin(xz[2*i]*.35+t)*.05+Math.cos(xz[2*i+1]*.3+t*1.3)*.05;wp.needsUpdate=true}
@@ -684,6 +690,10 @@ const Grade={
   const lb=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv2),depthTest:false}));lb.scale.set(3,1,1);lb.position.set(0,2.2,1.6);ar.rotation.x=Math.PI/2;ar.position.set(0,.4,1.1);bar.position.set(0,.15,0);bar.renderOrder=ar.renderOrder=9;lb.renderOrder=10;gd.add(bar,ar,lb);gd.visible=false;
   g.add(this.fp,this.fb,gd);g.visible=false;this.sc.add(g)},
  // indica de que lado fica a porta da construção (frente do modelo)
+ // holograma: seta azul flutuante mostrando para qual lado fica a frente da construção (gire com ⟳)
+ holo(b,w,d){if(!this.gh)return;if(!this.hl){const g=new THREE.Group(),m=new THREE.MeshBasicMaterial({color:0x58e6ff,transparent:true,opacity:.75,depthTest:false}),sh=new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,.9,8),m),cn=new THREE.Mesh(new THREE.ConeGeometry(.28,.55,10),m),rg=new THREE.Mesh(new THREE.RingGeometry(.55,.65,24).rotateX(-Math.PI/2),m);
+   sh.rotation.x=Math.PI/2;sh.position.z=.1;cn.rotation.x=Math.PI/2;cn.position.z=.8;rg.position.y=-.2;g.add(sh);g.add(cn);g.add(rg);g.traverse(o=>o.renderOrder=9);this.hl=g;this.gh.add(g)}
+  const ok=!(b.fence||b.path||b.mono||b.jipe||b.rem||b.veg||b.luz||/^pedra/.test(b.id));this.hl.visible=ok;if(!ok)return;this.hl.scale.setScalar(clamp(Math.min(w,d)*.45,.55,1.4));this.hl.position.set(0,(b.h||1)+1.2,0);this.hl.rotation.y=-this.r*Math.PI/2},
  porta(b,w,d){const g=this.gd;if(!g)return;const ok=DOORB.includes(b.id);g.visible=ok;if(!ok)return;const th=-this.r*Math.PI/2,fx=Math.sin(th),fz=Math.cos(th),ex=(Math.abs(fx)>.5?w:d)/2;g.rotation.y=th;g.position.set(fx*(ex+.05),.2,fz*(ex+.05));this.bar.scale.set(clamp(Math.min(w,d)*.5,1.6,6),1,1)},
  movivel(e){const b=this.bd(e.t);return !!b&&!b.fence&&!b.mono&&!b.jipe&&!b.path&&!b.rem},
  mvRest(){const m=this.mv;this.mv=null;if(!m)return;const e=m.e,b=this.bd(e.t);this.cels(b,e.i,e.j,e.r).forEach(k=>{this.occ[k]=1;this.ent[k]=e})},
@@ -764,7 +774,14 @@ const Grade={
   if(b.mesa){M(.9,.08,.9,T.tx('madeira',1,1,0xb88a58),0,.82,0);[[-.38,-.38],[.38,-.38],[-.38,.38],[.38,.38]].forEach(p=>M(.08,.82,.08,0x5b3f28,p[0],0,p[1]));C(.04,.04,1.5,0x6a5a4a,0,.82,0,6);S(new THREE.ConeGeometry(.75,.28,8),0xd04a3a,0,2.45,0);return g}
   if(b.cadeira){M(.5,.07,.5,T.tx('madeira',1,1,0xb88a58),0,.45,0);M(.5,.55,.06,T.tx('madeira',1,1,0xb88a58),0,.5,-.22);[[-.2,-.2],[.2,-.2],[-.2,.2],[.2,.2]].forEach(p=>M(.06,.45,.06,0x5b3f28,p[0],0,p[1]));return g}
   if(b.lixeira){C(.3,.24,.8,0x3f7a48,0,0,0,10);C(.34,.34,.1,0x2c5a34,0,.8,0,10);M(.08,.5,.02,0xe8e8e0,0,.2,.29);return g}
-  if(b.mono){const cn=T.tx('concreto',1,1);M(.8,.36,.8,cn,0,4,0);M(.64,.05,.64,0x3a3f45,0,4.36,0);[[-.26,-.26],[.26,-.26],[-.26,.26],[.26,.26]].forEach(p=>M(.07,.1,.07,0xf2c200,p[0],4.36,p[1]));
+  if(b.rampa){const ang=Math.atan2(4.4,d),len=Math.hypot(d,4.4);const rp=S(new THREE.BoxGeometry(w*.9,.25,len),0x9aa4ae,0,2.2,0);rp.rotation.x=-ang;
+   [-1,1].forEach(sg=>{const tr=S(new THREE.BoxGeometry(.06,.3,len),0xf2c200,sg*w*.46,2.45,0);tr.rotation.x=-ang});
+   for(let k=1;k<d;k++){const y=4.4*k/d,z=-d/2+k;M(w*.9,.06,.12,0x3a3f45,0,y+.02,z)}return g}
+   if(b.boasv){BASE(w,d);M(w-1,3.2,3,0xe9e2cf,0,0,-1);M(w-.4,.3,3.6,0x2f6f57,0,3.2,-1);M(1.4,2.2,.12,0x3a2a1a,0,0,.52);M(2.6,.45,.12,0xf2c200,0,2.55,.54);
+   [-1,1].forEach(sg=>{const x=sg*(w/2-.9);C(.3,.38,.9,0x9aa4ae,x,0,1.7,10);C(.5,.5,.12,0x6fb7e6,x,.9,1.7,12);C(.05,.05,.35,0x9aa4ae,x,1.0,1.7,6)});
+   M(1.8,.45,1.3,0x8a8d90,0,0,1.7);M(1.1,.5,.45,0x6e8a5a,0,.45,1.7);M(.22,.6,.2,0x6e8a5a,.5,.9,1.7);M(.42,.24,.26,0x6e8a5a,.66,1.45,1.7);M(.9,.14,.14,0x6e8a5a,-.95,.7,1.7);M(.14,.45,.14,0x6e8a5a,-.25,0,1.7);M(.14,.45,.14,0x6e8a5a,.25,0,1.7);return g}
+   if(b.vet){BASE(w,d);M(w-.6,2.8,d-.8,0xeef3ee,0,0,-.2);M(w-.2,.3,d-.4,0xc83a3a,0,2.8,-.2);M(1.2,2,.12,0x3a2a1a,0,0,d/2-.58);M(.9,.26,.1,0xc83a3a,0,2.2,d/2-.56);M(.26,.9,.1,0xc83a3a,0,1.88,d/2-.56);[-1.1,1.1].forEach(x=>M(.8,.7,.1,0x9ac4e6,x,1.2,d/2-.58));return g}
+   if(b.mono){const cn=T.tx('concreto',1,1);M(.8,.36,.8,cn,0,4,0);M(.64,.05,.64,0x3a3f45,0,4.36,0);[[-.26,-.26],[.26,-.26],[-.26,.26],[.26,.26]].forEach(p=>M(.07,.1,.07,0xf2c200,p[0],4.36,p[1]));
    const pl=new THREE.Group(),br=new THREE.Group();g.add(pl);g.add(br);g.userData.pil=pl;g.userData.br=br;
    const A=(rt,rb,hh,y)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,hh,8),cn);o.position.y=y+hh/2;o.castShadow=true;pl.add(o)};A(.34,.42,.4,0);A(.2,.27,3.3,.4);const hd=new THREE.Mesh(new THREE.BoxGeometry(.9,.3,.9),cn);hd.position.y=3.85;hd.castShadow=true;pl.add(hd);return g}
   if(b.heli){const hz=.8,hy=.5,pe=T.tx('concreto',3,1,0xc8ccd0);
@@ -873,7 +890,8 @@ const Grade={
   if(b.jipe){const e=this.ent[cs[0]];return e&&e.t==='mono'&&!this.L.some(x=>x.t==='jipe'&&x.i===i&&x.j===j)?null:'O jipe vai sobre um bloco livre do monotrilho'}
   
   if(cs.some(c=>this.occ[c]!==0&&!(b.cat==='dec'&&!b.path&&this.ent[c]&&EP(this.ent[c].t))))return'Local ocupado ou reservado para recintos';
-  if(b.portao&&this.L.some(e=>e.t==='portao'))return'O parque só pode ter um Portão Principal';
+  if(b.rampa){const f=[[0,1],[-1,0],[0,-1],[1,0]][r&3],ei=f[0]>0?i+w:f[0]<0?i-1:i,ej=f[1]>0?j+d:f[1]<0?j-1:j,em=ei>=0&&ej>=0&&ei<160&&ej<160?this.ent[ej*160+ei]:null;if(!(em&&em.t==='mono'))return'A ponta alta da rampa (seta azul) deve encostar no monotrilho; gire com ⟳'}
+   if(b.portao&&this.L.some(e=>e.t==='portao'))return'O parque só pode ter um Portão Principal';
   if(b.cadeira&&!this.D.some(([a,c])=>{const e=this.ent[(j+c)*160+i+a];return e&&e.t==='mesa'}))return'A cadeira precisa ficar junto a uma mesa';
   return null},
  por(c){const b=this.bd(c.t);if(!b||b.rem)return null;const r=c.r|0,[w,d]=this.dim(b,r),cs=this.cels(b,c.i,c.j,r),e={t:c.t,i:c.i,j:c.j,r,w,d,ac:false};
@@ -895,7 +913,7 @@ const Grade={
   this.L.forEach(e=>{e.ac=e.t==='portao'||(this.ini!=null&&this.viz(e).some(n=>this.alc[n]))});this.monotrilho();
   if(salvar){Jogo.reconc();Jogo.sync();Vis.rotas();Banco.salvarCons(this.L.map(e=>({t:e.t,i:e.i,j:e.j,r:e.r})));Jogo.salvar();Jogo.hud()}},
  monotrilho(){this.J=this.L.filter(e=>e.t==='jipe').map(e=>({e,k:e.k,a:null,b:null,f:1}))},
- animar(dt){(this.J||[]).forEach(j=>{if(Passeio.on&&Passeio.j===j)return;if(j.f>=1){const a=j.b==null?j.k:j.b,x=a%160,y=(a/160)|0,op=this.D.map(([p,q])=>[x+p,y+q]).filter(([X,Y])=>X>=0&&Y>=0&&X<160&&Y<160).map(([X,Y])=>Y*160+X).filter(m=>this.ent[m]&&this.ent[m].t==='mono'),alt=op.filter(m=>m!==j.a),l=alt.length?alt:op;if(!l.length)return;j.a=a;j.b=l[0|Math.random()*l.length];j.f=0}
+ animar(dt){if(this._rk!==this.L.length){this._rk=this.L.length;this.rampOk=this.L.filter(e=>e.t==='rampa').length>=2}if(!this.rampOk)return;(this.J||[]).forEach(j=>{if(Passeio.on&&Passeio.j===j)return;if(j.f>=1){const a=j.b==null?j.k:j.b,x=a%160,y=(a/160)|0,op=this.D.map(([p,q])=>[x+p,y+q]).filter(([X,Y])=>X>=0&&Y>=0&&X<160&&Y<160).map(([X,Y])=>Y*160+X).filter(m=>this.ent[m]&&this.ent[m].t==='mono'),alt=op.filter(m=>m!==j.a),l=alt.length?alt:op;if(!l.length)return;j.a=a;j.b=l[0|Math.random()*l.length];j.f=0}
    j.f=Math.min(1,j.f+dt*1.2);const A=j.a,B=j.b,ax=A%160,az=(A/160)|0,bx=B%160,bz=(B/160)|0;j.e.g.position.set(ax+(bx-ax)*j.f+.5-80,0,az+(bz-az)*j.f+.5-80);j.e.g.rotation.y=Math.atan2(bx-ax,bz-az)});
   if(this.ic)this.ic.position.y=this.icy+Math.sin(performance.now()/300)*.4},
  icone(p){if(this.ic){this.sc.remove(this.ic);this.ic=null}if(!p)return;const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.fillStyle='#c02020';x.beginPath();x.arc(32,32,28,0,6.3);x.fill();x.strokeStyle='#fff';x.lineWidth=3;x.stroke();x.font='30px sans-serif';x.textAlign='center';x.fillText('🔧',32,44);
@@ -904,7 +922,7 @@ const Grade={
  linhaFer(b){return!!(b&&(b.fence||b.path||b.mono))},
  pontosLinha(a,b){const h=Math.abs(b.i-a.i)>=Math.abs(b.j-a.j),r=[];if(h){const s=b.i>=a.i?1:-1;for(let i=a.i;;i+=s){r.push({i,j:a.j});if(i===b.i)break}}else{const s=b.j>=a.j?1:-1;for(let j=a.j;;j+=s){r.push({i:a.i,j});if(j===b.j)break}}return r},
  cancelar(){if(this.p0){this.p0=null;this.p1=null;this.mover(this.i,this.j);return}this.escolher(null)},
- mover(i,j){const b=this.bd(this.tool);if(!b)return;
+ mover(i,j){const b=this.bd(this.tool);if(!b)return;if(this.hl)this.hl.visible=false;
   if(b.rem&&!b.mov&&this.p0){if(this.gd)this.gd.visible=false;const a=this.p0,z=this.p1||{i:clamp(i,0,159),j:clamp(j,0,159)},i0=Math.min(a.i,z.i),i1=Math.max(a.i,z.i),j0=Math.min(a.j,z.j),j1=Math.max(a.j,z.j),w=i1-i0+1,d=j1-j0+1,vs=new Set();
     for(let y=j0;y<=j1;y++)for(let x=i0;x<=i1;x++){const e=this.ent[y*160+x];if(e)vs.add(e)}
     this.i=z.i;this.j=z.j;this.fp.scale.set(w,1,d);this.fb.scale.set(w,.3,d);this.gh.position.set(i0-80+w/2,0,j0-80+d/2);const cc=vs.size?0xff8855:0xff5555;this.fp.material.color.setHex(cc);this.fb.material.color.setHex(cc);this.gh.visible=true;
@@ -916,7 +934,7 @@ const Grade={
    $$('#h-msg').textContent='— '+b.nome+' × '+nv.length+' · '+fmt(custo)+(er?' · ⛔ '+er:sem?' · ⛔ dinheiro insuficiente':' · toque no ponto final ou confirme');return}
   const[w,d]=b.rem?[1,1]:this.dim(b);this.i=clamp(i,0,160-w);this.j=clamp(j,0,160-d);
   const ee=b.rem?this.ent[this.j*160+this.i]:null,er=b.rem?(ee?(b.mov&&!this.movivel(ee)?'esta construção não pode ser movida':null):(b.mov?'toque numa construção para selecionar':'nada para remover aqui')):this.valido(b,this.i,this.j,this.r);
-  this.fp.scale.set(w,1,d);this.fb.scale.set(w,b.rem?.3:(b.h||.5),d);this.gh.position.set(this.i-80+w/2,0,this.j-80+d/2);this.porta(b,w,d);
+  this.fp.scale.set(w,1,d);this.fb.scale.set(w,b.rem?.3:(b.h||.5),d);this.gh.position.set(this.i-80+w/2,0,this.j-80+d/2);this.porta(b,w,d);this.holo(b,w,d);
   const c=er?0xff5555:0x55ff88;this.fp.material.color.setHex(c);this.fb.material.color.setHex(c);this.gh.visible=true;
   $$('#h-msg').textContent='— '+b.nome+(b.custo?' · '+fmt(b.custo):'')+(er?' · ⛔ '+er:this.linhaFer(b)?' · toque no ponto inicial':' · ✔ pode construir')},
  escolher(id){const _ant=this.tool;if(EP(_ant)&&!EP(id)&&Jogo.G&&Grade.L.some(e=>EP(e.t))){Jogo.G.tutFim=true;Jogo.sujo=1}if(this.mv)this.mvRest();if(Jogo.visita||Foto.on)id=null;this.p0=null;this.p1=null;this.tool=id||null;const b=id&&this.bd(id);this.gh.visible=false;this.gr.visible=!!b;if(this.ov)this.ov.visible=!!b;
@@ -1053,7 +1071,7 @@ const Interior={on:false,ang:0,drag:false,
   for(let i=-3;i<=3;i++)M(.35,.35,14,md,i*3,5.75,0);
   M(9,.03,2.4,L({color:0x5a2a22}),0,.12,0);
   [[-8.6,-5.6],[8.6,-5.6],[-8.6,5.6],[8.6,5.6]].forEach(p=>{const c=new THREE.Mesh(new THREE.CylinderGeometry(.45,.5,6,12),mr);c.position.set(p[0],3,p[1]);sc.add(c)});
-  [[-5,-3.8,1],[5,3.8,.8]].forEach(a=>{M(6.4,.9,1.8,md,a[0],.55,a[1]);const o=this.osso();o.position.set(a[0],1,a[1]);o.scale.setScalar(a[2]);sc.add(o)});
+  
   sc.add(new THREE.AmbientLight(0x4a3624,.9));
   [[-5,-3.8],[5,3.8],[0,0]].forEach(p=>{const l=new THREE.PointLight(0xffb060,1.3,20,1.5);l.position.set(p[0],4.8,p[1]);sc.add(l);
    const b=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),new THREE.MeshBasicMaterial({color:0xffd9a0}));b.position.copy(l.position);sc.add(b)});
@@ -1067,7 +1085,7 @@ const Interior={on:false,ang:0,drag:false,
    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c)}));sp.scale.set(3,.56,1);sp.position.set(x,2.2,z);g.add(sp)});
   if(F.length>12){const c=document.createElement('canvas');c.width=512;c.height=64;const q=c.getContext('2d');q.fillStyle='#f0dcae';q.font='bold 30px Tahoma';q.textAlign='center';q.fillText('+ '+(F.length-12)+' fósseis no acervo',256,40);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c)}));sp.scale.set(4,.5,1);sp.position.set(0,3.4,0);g.add(sp)}
   this.scene.add(g)},
- entrar(){this.init();this.expor();this.pj=Jogador.on;if(this.pj)Jogador.sair();Jogo.fechar();est='interior';this.on=true;Mundo.on=false;document.querySelector('#hud').hidden=true;['#joy','#b-jsair','#b-ctx','#b-mus'].forEach(q=>document.querySelector(q).hidden=true);document.querySelector('#b-sair').hidden=false;this.cam.aspect=innerWidth/innerHeight;this.cam.updateProjectionMatrix()},
+ entrar(){this.init();this.expor();this.pj=Jogador.on;if(this.pj)Jogador.sair();Jogo.fechar();est='interior';this.on=true;Mundo.on=false;document.querySelector('#hud').hidden=true;['#joy','#b-jsair','#b-ctx','#b-mus','#b-torre'].forEach(q=>document.querySelector(q).hidden=true);document.querySelector('#b-sair').hidden=false;this.cam.aspect=innerWidth/innerHeight;this.cam.updateProjectionMatrix()},
  sair(){this.on=false;est='parque';document.querySelector('#b-sair').hidden=true;document.querySelector('#hud').hidden=false;if(this.pj)Jogador.entrar();else{Mundo.on=true;document.querySelector('#joy').hidden=false}},
  update(dt){if(!this.drag)this.ang+=dt*.1;this.cam.position.set(Math.sin(this.ang)*8.2,3,Math.cos(this.ang)*5.8);this.cam.lookAt(0,1.6,0)}
 };
@@ -1136,7 +1154,7 @@ const Arte={
 <script>
 // Parte 2: estado, economia, genética, incubação, expedições, fósseis, necessidades e manutenção
 const CUSTO={explorar:200,escavar:50,reparoPeca:2}; // provisórios: o Passo 3 não define o custo da expedição nem do reparo das cercas
-const PTS_CONS={sorvete:20,cachorro:20,pedra3:0,pedra4:0,pedra6:0,pedra8:0,pedra12:0,pedra16:0,palmeira:0,palmeira2:0,samambaia:0,bambu:0,arvore:0,araucaria:0,estatua2:0,mov:0,estacao:30,cerca:0,caminho:0,pesquisa:40,lab:40,incubacao:40,museu:40,portao:30,comida:30,lembranca:30,banheiro_m:25,banheiro_f:25,torre:30,heli:30,jipe:15,mono:25,seguranca:30,gerador:30},INFRA=['seguranca','gerador','mono'];
+const PTS_CONS={veterinario:30,boasvindas:30,rampa:10,sorvete:20,cachorro:20,pedra3:0,pedra4:0,pedra6:0,pedra8:0,pedra12:0,pedra16:0,palmeira:0,palmeira2:0,samambaia:0,bambu:0,arvore:0,araucaria:0,estatua2:0,mov:0,estacao:30,cerca:0,caminho:0,pesquisa:40,lab:40,incubacao:40,museu:40,portao:30,comida:30,lembranca:30,banheiro_m:25,banheiro_f:25,torre:30,heli:30,jipe:15,mono:25,seguranca:30,gerador:30},INFRA=['seguranca','gerador','mono'];
 const PONTOS=[[-110,45,'Montana, EUA','Grandes Carnívoros'],[-70,-45,'Patagônia, Argentina','Grandes Herbívoros'],[-40,-8,'Nordeste, Brasil',null],[-5,32,'Marrocos','Carnívoros Ágeis'],[8,18,'Deserto do Níger','Grandes Carnívoros'],[35,-6,'Tendaguru, Tanzânia','Grandes Herbívoros'],[-3,57,'Escócia',null],[105,45,'Gobi, Mongólia','Herbívoros Blindados'],[122,42,'Liaoning, China','Dinossauros de Crista'],[78,20,'Índia Central',null],[-112,52,'Alberta, Canadá','Dinossauros de Crista'],[145,-22,'Queensland, Austrália','Carnívoros Ágeis']];
 const MANUT_TIPOS={gerador:{n:'Gerador de Energia',d:'Falha no regulador de tensão: o gerador parou de fornecer energia.',f:.3},banheiro_m:{n:'Banheiro masculino',d:'Encanamento entupido: banheiro indisponível.',f:.25},banheiro_f:{n:'Banheiro feminino',d:'Encanamento entupido: banheiro indisponível.',f:.25},comida:{n:'Lanchonete de Hambúrguer',d:'Equipamento de cozinha quebrado: a loja está parada.',f:.3},sorvete:{n:'Sorveteria e Sucos',d:'Freezer com defeito: a loja está parada.',f:.3},cachorro:{n:'Cachorro-Quente',d:'Chapa quebrada: a barraca está parada.',f:.3},lembranca:{n:'Loja de Lembrancinhas',d:'Caixa registradora com defeito: a loja está parada.',f:.3},museu:{n:'Museu de Fósseis',d:'Vazamento no telhado: museu fechado até o reparo.',f:.2},torre:{n:'Torre de Observação',d:'Elevador com defeito: torre fechada.',f:.25},mono:{n:'Monotrilho',d:'Trilho danificado: trecho interditado até a manutenção.',f:4},equip:{n:'Bebedouro/abastecimento do cercado',d:'Equipamento com defeito: água e comida deste cercado pararam.',f:.4}};
 const $$=(s,r=document)=>r.querySelector(s);
@@ -1170,7 +1188,8 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
   [[50,15],[150,20],[400,30],[1000,40],[2500,60],[6000,80]].forEach(([n,p])=>{if(G.tv>=n)P('vis_'+n,p,'v',n+' visitantes recebidos')});
   if(G.satis>=80)P('sat80',30,'v','Satisfação acima de 80%');if(G.satis>=90)P('sat90',40,'v','Satisfação acima de 90%');
   const ac=Grade.L.filter(e=>e.ac).length;if(ac>=1)P('ac1',15,'v','Primeira instalação acessível por caminhos');if(ac>=4)P('ac4',25,'v','Parque bem conectado por caminhos');
-  [3,6,10,15,20].forEach(n=>{if(G.desc.length>=n)P('var_'+n,30,'d',n+' espécies diferentes')})},
+  [3,6,10,15,20].forEach(n=>{if(G.desc.length>=n)P('var_'+n,30,'d',n+' espécies diferentes')});
+   Grade.C.forEach((c,k)=>{if(c.livre.length>=4&&this.bemEstar(k)>=80&&G.dinos.some(d=>d.pl&&Grade.cid[d.j*160+d.i]===k))P('bem80',25,'d','Cercado com bem-estar acima de 80%')});if(this.cnt('veterinario')&&G.dinos.some(d=>d.curado))P('vet1',15,'i','Primeiro dinossauro curado')},
  // tutorial: ordem obrigatória no início para não gastar o dinheiro inicial à toa
  passoTut(){const G=this.G,n=id=>this.cnt(id);if(G.tutFim||G.dinos.some(d=>d.pl))return null;return!n('heli')?'heli':!n('portao')?'portao':!n('lab')?'lab':!n('incubacao')?'incubacao':!Grade.C.some(c=>c.livre.length>=4)?'cerca':null},
  bloqueio(b){if(b.rem)return null;const p=this.passoTut(),N={heli:'o Heliporto',portao:'o Portão Principal',lab:'o Laboratório de DNA',incubacao:'a Incubadora',cerca:'o primeiro cercado',gerador:'o Gerador',seguranca:'o Posto de Segurança'};
@@ -1187,6 +1206,17 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
   this.modal('Progressão do parque',`<p><b>${n?NOMES_NV[n-1]:'Iniciando'}</b> · ${(n/2).toString().replace('.',',')} estrelas · nível ${n}/10</p><progress max="${prox?prox-ant:1}" value="${prox?G.pts-ant:1}" style="width:100%"></progress>
    <p>${G.pts} pontos${prox?' · próxima meta: '+prox:' · nível máximo'}</p><p>Dinossauros <b>${G.pc.d}</b> · Construções <b>${G.pc.c}</b> · Infraestrutura <b>${G.pc.i}</b> · Visitantes <b>${G.pc.v}</b></p>
    ${this.reqNivel()}<p>Nível genético atual: <b>${this.ger()}</b>${nx>0?' · o próximo chega com '+(nx/2).toString().replace('.',',')+'★':n<10?' · híbridos livres com 5★':' · híbridos livres liberados'}</p>`)},
+ // bem-estar do cercado: plantas, árvores e pedras dentro dele (quanto maior o cercado, mais itens ele pede)
+ bemEstar(k){const C=Grade.C[k];if(!C)return 50;let pts=0;Grade.L.forEach(e=>{if(Grade.cid[e.j*160+e.i]!==k)return;const b=Grade.bd(e.t);if(b&&(b.veg||b.planta||e.t==='planta'||/^pedra/.test(e.t)))pts++});
+  const need=Math.max(2,Math.ceil(C.cel.length/40));return Math.round(clamp(25+75*Math.min(1,pts/need),25,100))},
+ // por segundo: calcula o bem-estar médio e sorteia doenças (cercado sem plantas/pedras adoece mais)
+ saude(){const G=this.G,BE={};let soma=0,nd=0,doentes=0;G.dinos.forEach(d=>{if(!d.pl)return;const k=Grade.cid[d.j*160+d.i];if(!(k>=0))return;if(BE[k]===undefined)BE[k]=this.bemEstar(k);const bem=BE[k];soma+=bem;nd++;
+   if(!d.doente&&Math.random()<(bem<50?1/(DIA_SEG*1.2):bem<75?1/(DIA_SEG*4):1/(DIA_SEG*12))){d.doente=1;this.notif('🤒',d.nome+' adoeceu',this.cnt('veterinario')?'Toque para abrir o Posto Veterinário.':'Construa um Posto Veterinário para curar.',()=>{if(this.cnt('veterinario'))this.vet()})}
+   if(d.doente)doentes++});this.bemMed=nd?soma/nd:70;this.nDoentes=doentes},
+ manutencao(){const G=this.G,H=G.hoje;if(!H)return;let taxa=0;G.dinos.forEach(d=>{if(d.pl){let nv=1;try{nv=espDe(d).nv||1}catch(e){}taxa+=MAN_DINO[Math.min(4,nv-1)]}});taxa+=this.cnt('veterinario')*MAN_VET;const x=taxa/DIA_SEG;G.din=Math.max(0,G.din-x);H.man=(H.man||0)+x},
+ vet(){const G=this.G,doentes=G.dinos.filter(d=>d.doente);this.atual=null;if(!this.en){this.toast('Sem energia: o posto veterinário não funciona.');return}
+  this.modal('Posto Veterinário',`<p>Manutenção do posto: <b>${fmt(MAN_VET)}/dia</b> · curar custa conforme o nível do dinossauro.</p>${doentes.map(d=>`<div class="op">${silH(d.sp,26)}${d.nome} (${espDe(d).nome}) 🤒 <button class="bt peq" data-c="${d.id}">Curar (${fmt(CURA_DINO[Math.min(4,(espDe(d).nv||1)-1)])})</button></div>`).join('')||'<i>Nenhum dinossauro doente.</i>'}<p><small>Dinossauros em cercados com poucas plantas e pedras adoecem mais.</small></p>`,
+   r=>r.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{const d=G.dinos.find(x=>x.id===b.dataset.c);if(!d)return;const c=CURA_DINO[Math.min(4,(espDe(d).nv||1)-1)];if(G.din<c){this.toast('Dinheiro insuficiente');return}G.din-=c;d.doente=0;d.curado=1;this.sujo=1;this.hud();this.toast('💉 '+d.nome+' foi curado.');this.vet()}))},
  fac(e){const G=this.G,k=e.i+'_'+e.j;this.atual=null;this.modal(CONSTR.find(x=>x.id===e.t).nome,`<p>Energia: <b>${this.en?'com energia':'sem energia'}</b></p><p>Condição: <b>${Math.round(G.cond[k]===undefined?100:G.cond[k])}%</b> · Situação: <b>${this.quebrado(e)?'🔧 em manutenção (toque no ícone vermelho)':'funcionando'}</b></p>`)},
  cInc(o){return o.hib?CUSTO_INC_MOD:CUSTO_INC[espDe(o).nv-1]},
  // notificação com som; toque abre a janela relacionada; com a aba escondida usa a notificação do navegador (se permitida)
@@ -1203,18 +1233,18 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
  hud(){const G=this.G,n=this.nivel();this.ih($$('#h-stat'),'<span class="pill"><i>💵</i><b>'+fmt(G.din)+'</b><button class="mais" data-a="portao">+</button></span><span class="pill"><i>⭐</i><b>'+(n/2).toString().replace('.',',')+'</b><button class="mais" data-a="progresso">+</button></span><span class="info">'+(G.h>=6&&G.h<18?'☀️ Dia':'🌙 Noite')+' · 👥 '+Math.round(G.vis||0)+' · 😊 '+Math.round(G.satis)+'%'+' · ⚡ '+(this.en?'com':'sem')+' energia'+'</span>');this.tut();const cr=G.crise,al=$$('#h-alerta');
   if(cr){al.hidden=false;this.ih(al,cr.fase==='espera'?'⚡ QUEDA DE ENERGIA — use o Modo Jogador: corra até o Posto de Segurança e desça ao subsolo ('+Math.floor(cr.t/60)+':'+String(cr.t%60).padStart(2,'0')+')':'⚡ Reativando a energia no subsolo...')}
   else if(G.prob){al.hidden=false;this.ih(al,'🔧 Manutenção pendente — toque no ícone vermelho sobre a construção')}else al.hidden=true;if(typeof travar==='function')travar()},
- tick(){const G=this.G,L=Grade.L,n=id=>this.cnt(id),cercas=L.filter(e=>e.t==='cerca').length,gs=L.filter(e=>e.t==='gerador'&&!this.quebrado(e)).length,cons=L.filter(e=>ENERGIA_USA.includes(e.t)).length,en=!G.apagao&&gs>0&&cercas<=gs*GER_CERCAS&&cons<=gs*GER_CONS,ab=n('seguranca')>0&&gs>0&&!G.apagao,pl=G.dinos.filter(d=>d.pl),now=Date.now();this.en=en;this.ab=ab;
+ tick(){const G=this.G,L=Grade.L,n=id=>this.cnt(id),cercas=L.filter(e=>e.t==='cerca').length,gs=L.filter(e=>e.t==='gerador'&&!this.quebrado(e)).length,cons=L.filter(e=>ENERGIA_USA.includes(e.t)).length,en=!G.apagao&&gs>0&&cercas<=gs*GER_CERCAS&&cons<=gs*GER_CONS,ab=n('seguranca')>0&&gs>0&&!G.apagao,pl=G.dinos.filter(d=>d.pl),now=Date.now();this.en=en;this.ab=ab;this.manutencao();
   G.h+=24/DIA_SEG;G.rel=(G.rel||0)+1;if(G.h>=24){G.h-=24;G.dia++;G.hoje={vis:0,ing:0,com:0,lem:0,tor:0}}
   pl.forEach(d=>{if(ab&&!this.equipQ(Grade.cid[d.j*160+d.i])){d.fome=Math.min(100,(d.fome==null?100:d.fome)+2);d.sede=Math.min(100,(d.sede==null?100:d.sede)+3)}else{d.fome=Math.max(0,d.fome-.06);d.sede=Math.max(0,d.sede-.09)}d.bem=(d.fome+d.sede)/2});
   G.cercaInt=Math.max(0,G.cercaInt-cercas*.0008);
   // receita só existe se a construção existe, é acessível por caminhos, tem energia e não está em manutenção
   const ok=t=>en&&L.some(e=>e.t===t&&!this.quebrado(e));this.uso={comida:FOODS.some(t=>ok(t)),lembranca:ok('lembranca'),torre:ok('torre'),museu:ok('museu')};
-  const p=G.preco,mp=p<=12?1+(12-p)*.025:Math.max(0,1-Math.pow((p-12)/28,1.2)),kd=pl.length,esp=new Set(pl.map(d=>espDe(d).id)).size,at=[...FOODS,'lembranca','torre','banheiro_m','banheiro_f','museu','fonte','estatua','estatua2'].filter(t=>L.some(e=>e.t===t)).length,V=6*(kd?12+6*Math.pow(kd-1,.8)+4*(esp-1)+5*Math.min(at,6):1)*(1+.25*this.nivel())*mp*(.5+.5*G.satis/100)*Math.min(1,.8+.1*(G.dia-1)),w=.25;
+  this.saude();const p=G.preco,mp=p<=12?1+(12-p)*.025:Math.max(0,1-Math.pow((p-12)/28,1.2)),kd=pl.length,esp=new Set(pl.map(d=>espDe(d).id)).size,at=[...FOODS,'lembranca','torre','banheiro_m','banheiro_f','museu','fonte','estatua','estatua2'].filter(t=>L.some(e=>e.t===t)).length,V=6*(kd?12+2*Math.pow(kd-1,.6)+1.5*Math.pow(Math.max(0,esp-1),.7)+2*Math.pow(Math.min(at,6),.8):1)*(1+.12*this.nivel())*(.92+.16*(this.bemMed||70)/100)*(1-.05*Math.min(6,this.nDoentes||0))*mp*(.5+.5*G.satis/100)*Math.min(1,.8+.1*(G.dia-1)),w=.25;
   if(pl.length&&n('heli')>0&&n('portao')>0&&!G.bv5){G.bv5=1;this.sujo=1;for(let i=0;i<5;i++)this.chegou();this.toast('🎟️ Os primeiros 5 visitantes chegaram ao parque!')}
   this.demanda=V;this.rodizio(n('portao')>0&&n('heli')>0?V:0);
   const dec=L.filter(e=>DECOR.includes(e.t)).length,bm=L.some(e=>e.t==='banheiro_m'&&!this.quebrado(e)),bf=L.some(e=>e.t==='banheiro_f'&&!this.quebrado(e)),
    alvo=clamp(60-Math.max(0,p-16)*1.2+(bm?4:-8)+(bf?4:-8)+(this.uso.comida?6:-4)+(this.uso.lembranca?4:0)+(this.uso.torre?3:0)+(en?0:-10)+(pl.length?(pl.reduce((a,d)=>a+d.bem,0)/pl.length-70)/6:0)+(G.cercaInt<40?-15:0)+Math.min(8,dec/3)-(G.prob?4:0)-(G.fug.length?10:0)-(G.prob&&G.prob.tipo!=='dano'&&this.idade()>MANUT_CFG.escalaApos?8:0),0,100);
-  G.satis+=(alvo-G.satis)*.05;
+  G.satis+=(Math.min(100,alvo+(this.cnt('boasvindas')>0?4:0)-3*Math.min(4,this.nDoentes||0))-G.satis)*.05;
   G.inc=G.inc.filter(o=>{if(o.fim>now)return true;this.nascer(o);return false});
   if(G.exp&&G.exp.fim<=now)this.voltar();this.ocorrencias(pl);this.marcos();this.avisos();this.sujo=1},
  // V = visitantes que entram por dia de jogo (20 min). Presentes médios = V/10: a cada minuto entra metade dos presentes (pagando) e quem está há 2 min sai.
@@ -1224,7 +1254,7 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
   G.coh=G.coh.filter(c=>c.a<120000);G.vis=G.coh.reduce((s,c)=>s+c.n,0)},
  chegou(){const G=this.G,u=this.uso,H=G.hoje,p=G.preco;G.din+=p;H.ing+=p;H.vis++;G.tv++;
   if(u.comida&&Math.random()<.25){const s=8+Math.random()*4;G.din+=s;H.com+=s;this.pontos('uso_comida',10,'v','Primeira venda de alimentação')}
-  if(u.lembranca&&Math.random()<.10){const s=10+Math.random()*10;G.din+=s;H.lem+=s;this.pontos('uso_lem',10,'v','Primeira venda de lembrancinhas')}
+  if(u.lembranca&&Math.random()<.40){const s=10+Math.random()*10;G.din+=s;H.lem+=s;this.pontos('uso_lem',10,'v','Primeira venda de lembrancinhas')}
   if(u.torre&&Math.random()<.10){G.din+=10;H.tor+=10;this.pontos('uso_torre',10,'v','Primeira subida na Torre de Observação')}
 if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
   Vis.spawn()},
@@ -1244,10 +1274,10 @@ if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
  custoProb(){return Math.round(this.G.prob.custo*(1+Math.min(.5,this.idade()/MANUT_CFG.escalaApos*.5)))},
  cCap(d){return 120*espDe(d).nv},
  icone(){Grade.icone(this.G.prob)},
- sortear(){const C=CLIMA_CFG,r=Math.random();let k;
-  if(this.noite()){if(r<C.noite.chuva)k=Math.random()<C.noite.tempestade?4:(Math.random()<.5?2:3);else k=Math.random()<.4?1:0}
-  else{if(r<C.dia.chuva)k=Math.random()<.5?2:3;else k=Math.random()<.3?1:0}
-  Mundo.climaAlvo=CLIMA_VAL[k];const s=$$('#s-clima');if(s)s.value=String(CLIMA_VAL[k])},
+ sortear(){const C=CLIMA_CFG,r=Math.random(),n=this.noite(),T=n?C.noite:C.dia;let k;
+  if(r<T.tempestade)k=4;else if(r<T.chuva)k=Math.random()<.5?2:3;else k=Math.random()<(n?.4:.3)?1:0;
+  Mundo.climaAlvo=CLIMA_VAL[k];const s=$$('#s-clima');if(s)s.value=String(CLIMA_VAL[k]);
+  this.crisePend=(k===4&&Math.random()<.4)}, // toda tempestade tem 40% de chance de causar uma crise
  ocorrencias(pl){const G=this.G,L=Grade.L;
   L.forEach(e=>{if(MANUT_TIPOS[e.t]){const k=e.i+'_'+e.j;G.cond[k]=Math.max(0,(G.cond[k]===undefined?100:G.cond[k])-.02)}});
   G.fug.forEach(id=>{const d=G.dinos.find(x=>x.id===id);if(d&&d.cap>0){d.cap--;if(d.cap<=0){G.fug=G.fug.filter(x=>x!==id);Adocao.remover(d.id);this.toast('🦖 '+d.nome+' foi recapturado e voltou ao estoque.')}}});
@@ -1257,7 +1287,7 @@ if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
   if(G.prob||G.cool>0)return;
   // crise elétrica: só com tempestade, à noite ou no começo da manhã (nunca com sol), no máximo uma ocorrência por vez
   const gen=L.filter(e=>e.t==='gerador');
-  if(Mundo.climaAlvo>=1&&!(G.h>=9&&G.h<18)&&pl.length&&gen.length){const f=(this.nivel()>=CRISE_CFG.nivelMin?1:CRISE_CFG.chanceAbaixoNivel)*(1+(100-Math.min(...gen.map(e=>G.cond[e.i+'_'+e.j]===undefined?100:G.cond[e.i+'_'+e.j])))/100);if(Math.random()<CRISE_CFG.pSeg*f)return this.iniciarCrise()}
+  if(this.crisePend&&Mundo.climaAlvo>=1){this.crisePend=false;if(pl.length&&gen.length&&this.cnt('seguranca')>0)return this.iniciarCrise()}
   if(Math.random()<1/MANUT_CFG.intervalo)this.novaManut()},
  iniciarCrise(){const G=this.G;G.crise={t:CRISE_CFG.espera,fase:'espera',alerta:0,ok:[],fl:[]};G.apagao=true;this.en=false;this.toast('⚡ QUEDA DE ENERGIA! A tempestade danificou o gerador e as cercas elétricas caíram. Mude para o Modo Jogador e corra até o subsolo do Posto de Segurança.');this.sujo=1},
  criseSucesso(){const G=this.G;G.crise=null;G.apagao=false;G.cool=MANUT_CFG.carenciaApos;Grade.L.filter(e=>e.t==='gerador').forEach(e=>G.cond[e.i+'_'+e.j]=35);this.toast('✅ Energia restabelecida! O gerador ficou danificado: fique de olho na manutenção.');this.sujo=1},
@@ -1282,7 +1312,7 @@ if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
  modal(t,h,mont){Som.sfx('pc');$$('#m-tit').textContent=t;$$('#m-cor').innerHTML=h;$$('#modal').hidden=false;Mundo.on=false;if(mont)mont($$('#m-cor'))},
  fechar(){$$('#modal').hidden=true;clearInterval(this.mi);this.atual=null;Mundo.on=(est==='parque'&&!Jogador.on)},
  relogio(){clearInterval(this.mi);this.mi=setInterval(()=>{document.querySelectorAll('.pbar').forEach(p=>{const a=+p.dataset.a,b=+p.dataset.b;p.firstChild.style.width=Math.min(100,Math.max(0,(Date.now()-a)/(b-a)*100))+'%'});document.querySelectorAll('[data-fim]').forEach(e=>{const s=Math.max(0,Math.round((+e.dataset.fim-Date.now())/1000));e.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');if(!s&&this.atual&&!e.dataset.ok){e.dataset.ok=1;setTimeout(()=>this.atual&&this[this.atual](),1200)}})},1000)},
- clique(i,j,t,e){if(t==='museu'&&e&&this.quebrado(e)){this.toast('O Museu de Fósseis está fechado até o reparo (toque no ícone vermelho).');return}const f={pesquisa:'pesquisa',lab:'lab',incubacao:'incub',museu:'museu',portao:'portao',seguranca:'posto'}[t];if(f){this.atual=f;return this[f]()}if(['comida','sorvete','cachorro','lembranca','torre','banheiro_m','banheiro_f'].includes(t))return this.fac(e);const k=Grade.cid[j*160+i];if(k>=0)this.cercado(k)},
+ clique(i,j,t,e){if(t==='museu'&&e&&this.quebrado(e)){this.toast('O Museu de Fósseis está fechado até o reparo (toque no ícone vermelho).');return}const f={pesquisa:'pesquisa',lab:'lab',incubacao:'incub',museu:'museu',portao:'portao',seguranca:'posto',veterinario:'vet'}[t];if(f){this.atual=f;return this[f]()}if(['comida','sorvete','cachorro','lembranca','torre','banheiro_m','banheiro_f'].includes(t))return this.fac(e);const k=Grade.cid[j*160+i];if(k>=0)this.cercado(k)},
  conferir(){const G=this.G,r=G.res;if(!r){this.pesquisa();return}const e=ESP.find(x=>x.id===r.sp);this.atual=null;
   this.modal('Resultados da expedição',`<div class="dnabox"><p>O explorador voltou de <b>${r.pt}</b> com algo especial…</p><button class="amb sel" id="b-rev" style="margin:8px auto">${r.tipo==='ovo'?Arte.ovo('#d9c27a',1,0):Arte.amb()}<b>? ? ?</b><small>Toque para revelar</small></button></div>`,
    rr=>{$$('#b-rev',rr).onclick=()=>{if(r.tipo==='ovo')G.ovos.push({sp:e.id,legit:true});else G.ambar.push({sp:e.id});G.res=null;this.sujo=1;Som.sfx('pc');
@@ -1371,7 +1401,7 @@ if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
  portao(){const G=this.G,H=G.hoje,u=this.uso||{};this.atual=null;
   this.modal('Portão Principal / Bilheteria',`<p>Ingresso: <b id="pv">${fmt(G.preco)}</b></p><input type="range" id="pr" min="5" max="60" value="${G.preco}" style="width:100%"><p><small>Ingresso caro reduz a procura e a satisfação: o maior preço não dá o maior lucro.</small></p>
    <p>Dia ${G.dia} · ${G.h>=6&&G.h<18?'☀️ Dia':'🌙 Noite'} · Visitantes hoje: <b>${H.vis}</b> (procura estimada: ${Math.round(this.demanda||0)}/dia) · Satisfação: <b>${Math.round(G.satis)}%</b></p>
-   <p>Receita de hoje — ingressos ${fmt(H.ing)} · alimentação ${fmt(H.com)} · lembrancinhas ${fmt(H.lem)} · torre ${fmt(H.tor)}</p><p>Funcionando agora: alimentação ${u.comida?'✔':'✖'} · lembrancinhas ${u.lembranca?'✔':'✖'} · torre ${u.torre?'✔':'✖'}</p>`,
+   <p>Receita de hoje — ingressos ${fmt(H.ing)} · alimentação ${fmt(H.com)} · lembrancinhas ${fmt(H.lem)} · torre ${fmt(H.tor)} · manutenção -${fmt(H.man||0)}</p><p>Funcionando agora: alimentação ${u.comida?'✔':'✖'} · lembrancinhas ${u.lembranca?'✔':'✖'} · torre ${u.torre?'✔':'✖'}</p>`,
    r=>$$('#pr',r).oninput=e=>{G.preco=+e.target.value;$$('#pv',r).textContent=fmt(G.preco);this.sujo=1})},
  posto(){const G=this.G,c=Grade.L.filter(e=>e.t==='cerca').length,custo=Math.round(c*CUSTO.reparoPeca*(100-G.cercaInt)/100),fg=G.fug.map(id=>G.dinos.find(d=>d.id===id)).filter(Boolean);this.atual=null;
   this.modal('Posto de Segurança',`<p>⚡ Energia: <b>${this.en?'com energia':G.apagao?'QUEDA DE ENERGIA — Modo Jogador: desça ao subsolo':'sem energia — cada gerador sustenta 5 construções e 400 cercas'}</b> · Abastecimento: <b>${this.ab?'ativo':'parado'}</b></p><p><small>O painel elétrico principal fica no subsolo (Modo Jogador, junto ao Posto).</small></p>
@@ -1381,7 +1411,7 @@ if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
   r=>{$$('#b-rep',r).onclick=()=>{if(G.din<custo){this.toast('Dinheiro insuficiente');return}G.din-=custo;G.cercaInt=100;this.pontos('rep',10,'i','Primeira manutenção de cercas');this.toast('🔧 Cercas reparadas.');this.posto()};
    r.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{const d=G.dinos.find(x=>x.id===b.dataset.c),c2=this.cCap(d);if(G.din<c2){this.toast('Dinheiro insuficiente');return}G.din-=c2;d.cap=60;this.sujo=1;this.posto()})})},
  cercado(k){const G=this.G,C=Grade.C[k];if(!C)return;this.atual=null;const ds=G.dinos.filter(d=>d.pl&&Grade.cid[d.j*160+d.i]===k),usado=ds.reduce((a,d)=>a+need(espDe(d)),0),cap=C.livre.length,est=G.dinos.filter(d=>!d.pl);
-  this.modal('Cercado ('+cap+' quadrados)',`<p>Espaço usado: <b>${usado}/${cap}</b></p>${ds.map(d=>`<div class="op">${silH(d.sp,26)}<input data-n="${d.id}" value="${d.nome}" maxlength="20"> ${espDe(d).nome}${d.legit?' ★':''} 🍖${Math.round(d.fome)} 💧${Math.round(d.sede)} <button class="bt peq" data-r="${d.id}">Retirar</button></div>`).join('')||'<i>Vazio</i>'}
+  this.modal('Cercado ('+cap+' quadrados)',`<p>Espaço usado: <b>${usado}/${cap}</b> · Bem-estar: <b>${this.bemEstar(k)}%</b> <small>(plantas e pedras no cercado)</small></p>${ds.map(d=>`<div class="op">${silH(d.sp,26)}<input data-n="${d.id}" value="${d.nome}" maxlength="20"> ${espDe(d).nome}${d.legit?' ★':''}${d.doente?' 🤒':''} 🍖${Math.round(d.fome)} 💧${Math.round(d.sede)} <button class="bt peq" data-r="${d.id}">Retirar</button></div>`).join('')||'<i>Vazio</i>'}
    <h4>Estoque</h4>${est.map(d=>`<div class="op">${silH(d.sp,26)}${d.nome} (${espDe(d).nome}) · ocupa ${need(espDe(d))} <button class="bt peq" data-p="${d.id}" ${usado+need(espDe(d))>cap?'disabled':''}>Colocar</button></div>`).join('')||'<i>Sem dinossauros no estoque.</i>'}`,
   r=>{r.querySelectorAll('[data-n]').forEach(i=>i.onchange=()=>{G.dinos.find(d=>d.id===i.dataset.n).nome=i.value.trim()||'Sem nome';this.sujo=1});
    r.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{G.dinos.find(d=>d.id===b.dataset.r).pl=false;this.sync();this.cercado(k)});
@@ -1391,7 +1421,7 @@ if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
 </script>
 <script>
 // Modo Jogador: primeira pessoa — correr pelo parque até o Posto de Segurança e descer ao subsolo
-const Jogador={on:false,x:0,z:0,yaw:0,pitch:0,vx:0,vy:0,k:{},sh:0,passo:0,
+const Jogador={on:false,up:null,twNear:null,x:0,z:0,yaw:0,pitch:0,vx:0,vy:0,k:{},sh:0,passo:0,
  init(){if(this.ok)return;this.ok=1;const cv=document.querySelector('#c'),joy=document.querySelector('#joy'),kn=document.querySelector('#knob');let look=null,jp=null;
   cv.addEventListener('pointerdown',e=>{if(!this.on||est!=='parque')return;look={id:e.pointerId,x:e.clientX,y:e.clientY,x0:e.clientX,y0:e.clientY,t:performance.now()};cv.setPointerCapture(e.pointerId)});
   cv.addEventListener('pointermove',e=>{if(!look||e.pointerId!==look.id)return;this.yaw-=(e.clientX-look.x)*.006;this.pitch=clamp(this.pitch-(e.clientY-look.y)*.005,-1.45,1.45);look.x=e.clientX;look.y=e.clientY});
@@ -1407,12 +1437,12 @@ const Jogador={on:false,x:0,z:0,yaw:0,pitch:0,vx:0,vy:0,k:{},sh:0,passo:0,
   if(!this.livre(this.x,this.z)){const g=Grade.L.find(e=>e.t==='portao');this.x=g?g.o.position.x:0;this.z=g?g.o.position.z+g.d/2+1.5:40}
   for(let k=0;k<40&&!this.livre(this.x,this.z);k++)this.z+=1;
   this.yaw=Mundo.o.yaw;this.pitch=0;this.on=true;Mundo.on=false;Mundo.cam.fov=70;Mundo.cam.updateProjectionMatrix();
-  ['#h-obra','#h-mapa'].forEach(s=>document.querySelector(s).hidden=true);document.querySelector('#joy').hidden=false;document.querySelector('#joy').classList.remove('ger');document.querySelector('#b-obra').hidden=false},
- sair(){this.on=false;Mundo.on=true;Mundo.cam.fov=50;Mundo.cam.updateProjectionMatrix();['#h-obra','#h-mapa'].forEach(s=>document.querySelector(s).hidden=false);
-  ['#b-jsair','#b-ctx','#b-mus','#b-obra'].forEach(s=>document.querySelector(s).hidden=true);document.querySelector('#joy').classList.add('ger')},
+  ['#h-obra','#h-mapa'].forEach(s=>document.querySelector(s).hidden=true);document.querySelector('#joy').hidden=false;document.querySelector('#joy').classList.remove('ger');document.querySelector('#b-obra').hidden=false;document.querySelector('#b-vjog').hidden=true;this.up=null},
+ sair(){this.up=null;this.on=false;Mundo.on=true;Mundo.cam.fov=50;Mundo.cam.updateProjectionMatrix();if(!Jogo.visita)['#h-obra','#h-mapa'].forEach(s=>document.querySelector(s).hidden=false);
+  ['#b-jsair','#b-ctx','#b-mus','#b-torre','#b-obra'].forEach(s=>document.querySelector(s).hidden=true);document.querySelector('#joy').classList.add('ger');if(Jogo.visita)document.querySelector('#b-vjog').hidden=false},
  update(dt){if(!this.on||Passeio.on)return;const k=this.k,fy=(k.w||k.arrowup?1:0)-(k.s||k.arrowdown?1:0)+this.vy,sx=(k.d||k.arrowright?1:0)-(k.a||k.arrowleft?1:0)+this.vx,n=Math.hypot(fy,sx);
   if(k.q)this.yaw+=dt*1.8;if(k.e)this.yaw-=dt*1.8;
-  if(n>.05){const sp=4.2*dt*Math.min(1,n)/n,s=Math.sin(this.yaw),c=Math.cos(this.yaw),dx=(-s*fy+c*sx)*sp,dz=(-c*fy-s*sx)*sp;
+  if(n>.05&&!this.up){const sp=4.2*dt*Math.min(1,n)/n,s=Math.sin(this.yaw),c=Math.cos(this.yaw),dx=(-s*fy+c*sx)*sp,dz=(-c*fy-s*sx)*sp;
    if(this.livre(this.x+dx,this.z))this.x+=dx;if(this.livre(this.x,this.z+dz))this.z+=dz;this.passo+=dt*7}
   Mundo.o.t.set(this.x,0,this.z);
   // Brontossauro faz a tela vibrar; Galimimo se assusta com passos
@@ -1421,10 +1451,13 @@ const Jogador={on:false,x:0,z:0,yaw:0,pitch:0,vx:0,vy:0,k:{},sh:0,passo:0,
    if(d.rec.sp==='galimimo'&&n>.05&&dd<7&&!(d.susto>0)){const cl=Dinos.cel(d.rec);let best=null,bd=-1;for(let q=0;q<8;q++){const c=cl[0|Math.random()*cl.length],x=c%160+.5-80,z=((c/160)|0)+.5-80,d2=Math.hypot(x-this.x,z-this.z);if(d2>bd){bd=d2;best=[x,z]}}if(best){d.alvo=best;d.st='anda';d.t=5;d.susto=3}}});
   this.sh=sh;
   const p=Grade.L.find(e=>e.t==='seguranca'),bt=document.querySelector('#b-ctx');
-  if(p){const dd=Math.hypot(Math.max(0,Math.abs(this.x-p.o.position.x)-p.w/2),Math.max(0,Math.abs(this.z-p.o.position.z)-p.d/2));bt.hidden=dd>2.4}else bt.hidden=true;
-  const mu=Grade.L.find(e=>e.t==='museu'),bm=document.querySelector('#b-mus');bm.hidden=!(mu&&Math.hypot(Math.max(0,Math.abs(this.x-mu.o.position.x)-mu.w/2),Math.max(0,Math.abs(this.z-mu.o.position.z)-mu.d/2))<2.4)},
+  if(p){const dd=Math.hypot(Math.max(0,Math.abs(this.x-p.o.position.x)-p.w/2),Math.max(0,Math.abs(this.z-p.o.position.z)-p.d/2));bt.hidden=!!Jogo.visita||dd>2.4}else bt.hidden=true;
+  const mu=Grade.L.find(e=>e.t==='museu'),bm=document.querySelector('#b-mus');bm.hidden=!(mu&&Math.hypot(Math.max(0,Math.abs(this.x-mu.o.position.x)-mu.w/2),Math.max(0,Math.abs(this.z-mu.o.position.z)-mu.d/2))<2.4);
+  const bT=document.querySelector('#b-torre');if(this.up){bT.hidden=false;bT.textContent='⬇ Descer da torre'}else{const tw=Grade.L.find(e=>e.t==='torre'&&Math.hypot(Math.max(0,Math.abs(this.x-e.o.position.x)-e.w/2),Math.max(0,Math.abs(this.z-e.o.position.z)-e.d/2))<2.4);this.twNear=tw||null;bT.hidden=!tw;bT.textContent='⬆ Subir na torre'}},
+ // sobe até o topo da torre (só olha ao redor) e desce na frente dela
+ torre(){if(this.up){const t=this.up;this.up=null;this.x=t.o.position.x;this.z=t.o.position.z+t.d/2+1.5;for(let k=0;k<30&&!this.livre(this.x,this.z);k++)this.z+=1;return}const t=this.twNear;if(!t)return;this.up=t;this.x=t.o.position.x;this.z=t.o.position.z},
  camera(){const c=Mundo.cam,t=performance.now()*.001,b=Math.sin(this.passo)*.03,sh=this.sh?Math.sin(t*38)*this.sh:0,cp=Math.cos(this.pitch);
-  c.position.set(this.x,1.1+b+sh,this.z);c.lookAt(this.x-Math.sin(this.yaw)*cp,1.1+b+sh+Math.sin(this.pitch),this.z-Math.cos(this.yaw)*cp)}
+  const ey=this.up?9.6:1.1;c.position.set(this.x,ey+b+sh,this.z);c.lookAt(this.x-Math.sin(this.yaw)*cp,ey+b+sh+Math.sin(this.pitch),this.z-Math.cos(this.yaw)*cp)}
 };
 
 </script>
@@ -1518,7 +1551,7 @@ const Som={A:null,on:true,tema:null,pa:0,tn:5,td:12,fl:0,
   else if(k==='monotrilho')this.tom(160,120,.08,'square',.012);else if(k==='foto'){this.tom(1400,900,.05,'square',.05);setTimeout(()=>this.A&&this.tom(900,500,.08,'square',.05),70)}}catch(e){}},
  update(dt){if(!this.A||!this.on)return;const emP=est==='parque'||est==='interior'||est==='subsolo';let cl=0,noite=false;try{cl=Mundo.clima||0;noite=Jogo.G&&Jogo.noite()}catch(e){}
   this.tema=!emP?'dia':cl>=.7?'tempestade':noite?'noite':'dia';
-  const u=(g,v)=>g.gain.value+=(v-g.gain.value)*Math.min(1,dt*2);u(this.chuva,emP?clamp(cl*1.2-.1,0,1)*.45:0);u(this.vento,emP?.04+cl*.25:0);
+  const u=(g,v)=>g.gain.value+=(v-g.gain.value)*Math.min(1,dt*2);u(this.chuva,emP?clamp((cl-.38)*2,0,1)*.45:0);u(this.vento,emP?.04+cl*.25:0);
   if(emP&&Mundo.flash>.5&&!this.fl)this.sfx('trovao');this.fl=Mundo.flash>.5?1:0;
   if(emP&&est==='parque'){this.tn-=dt;if(this.tn<=0){this.tn=4+Math.random()*7;if(cl<.5)this.sfx(noite?'grilo':'ave')}
    this.td-=dt;if(this.td<=0){this.td=14+Math.random()*16;if(Jogo.G&&Jogo.G.dinos.some(d=>d.pl))this.sfx('dino')}
@@ -1526,7 +1559,7 @@ const Som={A:null,on:true,tema:null,pa:0,tn:5,td:12,fl:0,
  alternar(){this.on=!this.on;if(this.on)this.ini();if(this.mg)this.mg.gain.value=this.on?.55:0;document.querySelector('#b-som').textContent=this.on?'🔊 Som ligado':'🔇 Som desligado'}};
 // Passeio de jipe: o único jeito de andar pelo monotrilho; câmera em terceira pessoa atrás do jipe
 const Passeio={on:false,
- ent(){if(est!=='parque'||this.on||Foto.on)return;if(!Grade.J||!Grade.J.length){Jogo.toast('Construa um jipe sobre o monotrilho para passear.');return}
+ ent(){if(est!=='parque'||this.on||Foto.on)return;if(!Grade.J||!Grade.J.length){Jogo.toast('Construa um jipe sobre o monotrilho para passear.');return}if(!Grade.rampOk){Jogo.toast('O monotrilho precisa de 2 rampas encostadas nele (uma em cada ponta) para funcionar.');return}
   if(Jogador.on)Jogador.sair();Grade.escolher(null);Jogo.fechar();this.j=Grade.J[0];this.j.f=1;this.v=0;this.on=true;Mundo.on=false;Mundo.cam.fov=60;Mundo.cam.updateProjectionMatrix();
   ['#h-obra','#h-mapa','#h-tut'].forEach(q=>document.querySelector(q).hidden=true);document.querySelector('#joy').hidden=false;document.querySelector('#joy').classList.remove('ger');document.querySelector('#b-jipe').hidden=false;document.querySelector('#b-jog').hidden=true},
  sair(){if(!this.on)return;this.on=false;Mundo.on=true;Mundo.cam.fov=50;Mundo.cam.updateProjectionMatrix();Mundo.o.t.set(this.j.e.g.position.x,0,this.j.e.g.position.z);['#h-obra','#h-mapa'].forEach(q=>document.querySelector(q).hidden=false);document.querySelector('#b-jipe').hidden=true;document.querySelector('#joy').classList.add('ger');document.querySelector('#b-jog').hidden=false;if(!Jogo.visita){Jogo.hud();Jogador.entrar()}},
@@ -1685,12 +1718,12 @@ function travar(){UI.travar()}
 function carregando(on,m){const e=document.getElementById('carrega');if(!e)return;clearTimeout(carregando.t);if(on){e.hidden=false;document.getElementById('c-msg').textContent=m||'Carregando…';const b=e.querySelector('.cb i');b.style.animation='none';void b.offsetWidth;b.style.animation='';carregando.t=setTimeout(()=>e.hidden=true,30000)}else e.hidden=true}
 async function entrar(p,vis){const M=MAPAS.find(m=>m.id===p.mapa)||MAPAS[0];$('#st').textContent='Carregando parque...';carregando(true,'Gerando o terreno…');await new Promise(r=>setTimeout(r,60));
  Mundo.init(M);carregando(true,'Carregando suas construções…');let c=vis?vis.c:await Banco.cons();const st=vis?vis.st:await Banco.estado(),novo=!st||st.v!==3;if(novo){c=[];Banco.salvarCons([])}carregando(true,'Montando o parque…');await new Promise(r=>setTimeout(r,40));Jogo.carregar(novo?null:st,p);Mundo.hora=Jogo.G.h;Vis.init(Mundo.scene);Grade.init(Mundo.scene,c);Vis.rotas();Vis.restaurar(Jogo.G.vz);Dinos.init();Jogo.sync();Jogo.icone();Jogador.init();Subsolo.init();
- if(!Mundo.ctl){Mundo.controles(cv);Mundo.ctl=1}Mundo.on=true;ajustar();tela('parque');$('#joy').classList.add('ger');$('#h-nome').textContent='◆ '+p.nome;if(vis){['#h-obra','#h-tut'].forEach(q=>$(q).hidden=true);$('#h-stat').textContent='👁 Visita — somente leitura';$('#b-vsair').hidden=false}else{Adocao.sincronizar();setTimeout(()=>Adocao.vigiar(),4000)}
+ if(!Mundo.ctl){Mundo.controles(cv);Mundo.ctl=1}Mundo.on=true;ajustar();tela('parque');$('#joy').classList.add('ger');$('#h-nome').textContent='◆ '+p.nome;if(vis){['#h-obra','#h-tut'].forEach(q=>$(q).hidden=true);$('#h-stat').textContent='👁 Visita — somente leitura';$('#b-vsair').hidden=false;$('#b-vjog').hidden=false}else{Adocao.sincronizar();setTimeout(()=>Adocao.vigiar(),4000)}
  const _ap=()=>{carregando(false);if(vis){if(Jogador.on){Jogador.sair();$('#h-obra').hidden=true}return}if(Jogador.on)Jogador.sair();Jogador.entrar()};
  if(hudOk){_ap();return}hudOk=true;setTimeout(_ap,0);
  construirHud();
  $('#b-girar').onclick=()=>Grade.girar();$('#b-conf').onclick=()=>Grade.construir();$('#b-canc').onclick=()=>Grade.cancelar();
- $('#b-jog').onclick=()=>Jogador.entrar();$('#b-obra').onclick=()=>Jogador.sair();$('#b-ir-jogador').onclick=()=>Jogador.entrar();$('#b-jsair').onclick=()=>Jogador.sair();$('#b-ctx').onclick=()=>Subsolo.abrir();$('#b-foto').onclick=()=>Foto.ent();$('#b-passeio').onclick=()=>Passeio.ent();
+ $('#b-jog').onclick=()=>Jogador.entrar();$('#b-torre').onclick=()=>Jogador.torre();$('#b-vjog').onclick=()=>Jogador.entrar();$('#b-obra').onclick=()=>Jogador.sair();$('#b-ir-jogador').onclick=()=>Jogador.entrar();$('#b-jsair').onclick=()=>Jogador.sair();$('#b-ctx').onclick=()=>Subsolo.abrir();$('#b-foto').onclick=()=>Foto.ent();$('#b-passeio').onclick=()=>Passeio.ent();
   const tc=()=>{const d=document,e=d.documentElement,on=d.fullscreenElement||d.webkitFullscreenElement;try{if(on){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else if(e.requestFullscreen||e.webkitRequestFullscreen){(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}else Jogo.toast('Neste aparelho, abra o menu do navegador e use "Adicionar à tela inicial" para esconder a barra.')}catch(x){Jogo.toast('Tela cheia indisponível neste navegador.')}};
   $('#b-tela').onclick=tc;$('#f-foto').onclick=()=>Foto.tirar();$('#f-sai').onclick=()=>Foto.sair();$('#b-resg').onclick=()=>Adocao.abrir();}
 
