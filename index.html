@@ -320,24 +320,25 @@ const CONSTR=[
  {id:'pesquisa',cat:'ciencia',nome:'Centro de Pesquisa',w:6,d:6,h:5,c:0x4a5d78,tec:1,custo:1600},
  {id:'lab',cat:'ciencia',nome:'Laboratório de DNA',w:8,d:6,h:5,c:0x3f6a64,tec:1,custo:2500},
  {id:'incubacao',cat:'ciencia',nome:'Incubadora',w:5,d:5,h:4.5,c:0x56706a,tec:1,custo:1800},
- {id:'museu',cat:'ciencia',nome:'Museu de Fósseis',w:12,d:8,h:6,c:0x8a6a45,t:0x4a3624,museu:1,custo:1000},
- {id:'veterinario',cat:'ciencia',nome:'Posto Veterinário',w:4,d:4,h:3.6,c:0xe8efe9,t:0xc83a3a,vet:1,custo:900},
+ {id:'documentarios',cat:'eco',nome:'Sala de Documentários',w:5,d:4,h:3.6,c:0x3a3f55,t:0x22242f,doc:1,est:3,custo:1200},
+ {id:'museu',cat:'ciencia',nome:'Museu de Fósseis',w:12,d:8,h:6,c:0x8a6a45,t:0x4a3624,museu:1,est:4,custo:3500},
+ {id:'veterinario',cat:'ciencia',nome:'Posto Veterinário',w:4,d:4,h:3.6,c:0xe8efe9,t:0xc83a3a,vet:1,est:3,custo:2000},
  {id:'boasvindas',cat:'eco',nome:'Centro de Boas-vindas',w:6,d:5,h:4.2,boasv:1,custo:1000},
  {id:'portao',cat:'eco',nome:'Portão Principal',w:8,d:4,h:6,portao:1,custo:200},
  {id:'comida',cat:'eco',nome:'Lanchonete de Hambúrguer',w:3,d:3,h:3,c:0x8a6a3a,t:0x9a4a2a,custo:320},
  {id:'sorvete',cat:'eco',nome:'Sorveteria e Sucos',w:3,d:3,h:3.4,c:0x6ac0e0,t:0xf08ab8,custo:300},
- {id:'cachorro',cat:'eco',nome:'Cachorro-Quente',w:3,d:3,h:3.4,c:0xe8b030,t:0xc8402a,custo:280},
- {id:'lembranca',cat:'eco',nome:'Loja de Lembrancinhas',w:3,d:3,h:3,c:0x4a6a8a,t:0x2c4a5a,custo:400},
- {id:'banheiro_m',cat:'eco',nome:'Banheiro masculino',w:3,d:3,h:3,c:0x5a6a7a,sinal:0x3a7ac0,custo:300},
- {id:'banheiro_f',cat:'eco',nome:'Banheiro feminino',w:3,d:3,h:3,c:0x7a5a6a,sinal:0xd04a8a,custo:300},
- {id:'torre',cat:'eco',nome:'Torre de Observação',w:3,d:3,h:9,torre:1,custo:500},
+ {id:'cachorro',cat:'eco',nome:'Cachorro-Quente',w:3,d:3,h:3.4,c:0xe8b030,t:0xc8402a,est:2,custo:700},
+ {id:'lembranca',cat:'eco',nome:'Loja de Lembrancinhas',w:3,d:3,h:3,c:0x4a6a8a,t:0x2c4a5a,est:2,custo:900},
+ {id:'banheiro_m',cat:'eco',nome:'Banheiro masculino',w:3,d:3,h:3,c:0x5a6a7a,sinal:0x3a7ac0,est:2,custo:600},
+ {id:'banheiro_f',cat:'eco',nome:'Banheiro feminino',w:3,d:3,h:3,c:0x7a5a6a,sinal:0xd04a8a,est:2,custo:600},
+ {id:'torre',cat:'eco',nome:'Torre de Observação',w:3,d:3,h:9,torre:1,est:3,custo:1500},
  {id:'heli',cat:'log',nome:'Heliporto',w:10,d:10,h:0.5,heli:1,custo:1500},
  {id:'seguranca',cat:'log',nome:'Posto de Segurança',w:4,d:5,h:4,c:0x4a5a44,tec:1,custo:800},
  {id:'gerador',cat:'log',nome:'Gerador de Energia',w:6,d:4,h:3,c:0x5a5a4a,tec:1,custo:700},
- {id:'estacao',cat:'log',nome:'Monotrilho (estação)',w:4,d:8,h:6.7,c:0x9aa4ae,estacao:1,custo:850},
- {id:'mono',cat:'log',nome:'Monotrilho (trecho)',w:1,d:1,h:4.4,mono:1,custo:15},
- {id:'jipe',cat:'log',nome:'Jipe (sobre o monotrilho)',w:1,d:1,h:1.8,jipe:1,custo:350},
- {id:'rampa',cat:'log',nome:'Rampa do monotrilho',w:1,d:4,h:4.4,rampa:1,custo:150},
+ {id:'estacao',cat:'log',nome:'Monotrilho (estação)',w:4,d:8,h:6.7,c:0x9aa4ae,estacao:1,est:4,custo:3000},
+ {id:'mono',cat:'log',nome:'Monotrilho (trecho)',w:1,d:1,h:4.4,mono:1,est:4,custo:15},
+ {id:'jipe',cat:'log',nome:'Jipe (sobre o monotrilho)',w:1,d:1,h:1.8,jipe:1,est:4,custo:900},
+ {id:'rampa',cat:'log',nome:'Rampa do monotrilho',w:1,d:4,h:4.4,rampa:1,est:4,custo:400},
  {id:'caminho',cat:'dec',nome:'Caminho',w:1,d:1,h:.1,path:1,custo:5},
  {id:'caminhoP',cat:'dec',nome:'Caminho de pedra',w:1,d:1,h:.1,path:1,custo:5},
  {id:'luz',cat:'dec',nome:'Luz',w:1,d:1,h:6.7,luz:1,custo:8},
@@ -364,7 +365,7 @@ const CONSTR=[
 ];
 const EP=t=>t==='caminho'||t==='caminhoP';
 const FOODS=['comida','sorvete','cachorro'],DECOR=CONSTR.filter(b=>b.cat==='dec'&&!b.path&&!b.cadeira).map(b=>b.id),
- DOORB=['pesquisa','lab','incubacao','museu','portao','comida','sorvete','cachorro','lembranca','banheiro_m','banheiro_f','torre','heli','seguranca','gerador','estacao','veterinario','boasvindas'];
+ DOORB=['pesquisa','lab','incubacao','museu','portao','comida','sorvete','cachorro','lembranca','banheiro_m','banheiro_f','torre','heli','seguranca','gerador','estacao','veterinario','boasvindas','documentarios'];
 
 // ---- Bases genéticas modernas (cada classificação aceita só a sua)
 const BASES=[
@@ -405,20 +406,20 @@ function espDe(r){if(!r.hib)return ESP.find(e=>e.id===r.sp);const a=ESP.find(e=>
  return{id:'hib',nome:r.hib.nome,cls:'Híbrido',nv:5,m:m(a.m,b.m)*r.hib.esc,fama:m(a.fama,b.fama)+2,c:r.hib.cor,b:v(a.b,b.b),lh:m(a.lh,b.lh),lr:m(a.lr,b.lr),neck:m(a.neck,b.neck),na:m(a.na,b.na),head:v(a.head,b.head),tail:m(a.tail,b.tail),bip:a.bip,ex:a.ex+','+b.ex,inc:40}}
 
 // ---- Configurações de economia e progressão (Passo 3) — tudo ajustável aqui
-const DIA_SEG=1200;                                   // duração do dia: 20 minutos
+const DIA_SEG=720;                                    // duração do dia: 12 minutos (valores diários do jogo são medidos em dias de 20 min e convertidos)
 const VIS_DIA=[60,90,130,180,240,320,420,540,680,840,1000]; // visitantes/dia por nível do parque (índice 0 = antes do nível 1)
-const PONTOS_NV=[110,270,490,770,1100,1480,1920,2410,2960,3560]; // pontos acumulados por nível (não são gastos)
+const PONTOS_NV=[90,230,420,650,930,1250,1620,2040,2470,2900]; // pontos acumulados por nível (não são gastos)
 const NOMES_NV=['Projeto Pioneiro','Parque em Formação','A Grande Descoberta','Parque Consolidado','Maravilha Pré-Histórica','Complexo Científico','Santuário dos Gigantes','Potência Paleontológica','Império Pré-Histórico','Legado da Era dos Gigantes'];
 const GER_POR_NIVEL=[1,1,2,2,3,3,4,4,5,5,5];          // nível genético liberado em cada nível do parque (índice = nível)
-const CUSTO_PESQ=[200,400,700,1100,1600],CUSTO_INC=[150,250,400,600,850],CUSTO_PESQ_MOD=1000,CUSTO_INC_MOD=1200;
+const CUSTO_PESQ=[200,400,700,1100,1600],CUSTO_INC=[100,200,350,550,800],CUSTO_PESQ_MOD=1000,CUSTO_INC_MOD=1200;
 
 // ---- Clima, crises e manutenção (Passo 4) — valores base ajustáveis
 const CLIMA_CFG={noite:{tempestade:.30,chuva:.55},dia:{tempestade:.20,chuva:.40},rolagem:300}; // tempestade = chance de sorteio; chuva = chance acumulada de qualquer chuva (inclui tempestade) // chances por sorteio; rolagem = segundos de jogo entre sorteios
 const CLIMA_VAL=[0,.3,.5,.75,1];                                               // limpo, nublado, chuva, chuva forte, tempestade
 const MANUT_CFG={intervalo:2400,carenciaApos:180,escalaApos:600};            // ~1 problema a cada 40 min de jogo ativo
 const CRISE_CFG={nivelMin:3,chanceAbaixoNivel:.25,pSeg:.003,espera:180,holdMin:6,holdMax:8};
-const MAN_DINO=[30,70,120,180,240],MAN_VET=60,CURA_DINO=[40,80,120,170,220]; // manutenção diária por dinossauro (nível 1 a 5), do posto veterinário, e custo de cura
-const GER_CERCAS=400,GER_CONS=5,ENERGIA_USA=['pesquisa','lab','incubacao','museu','comida','sorvete','cachorro','lembranca','banheiro_m','banheiro_f','torre','seguranca','estacao','veterinario'];
+const MAN_DINO=[30,80,150,240,320],MAN_HIB=320,MAN_VET=60,CURA_DINO=[40,80,120,170,220],MAN_CONS={banheiro_m:20,banheiro_f:20,cachorro:20,lembranca:40,torre:60,documentarios:60,veterinario:60,museu:100,estacao:150,jipe:60}; // valores por dia de 20 min // manutenção diária por dinossauro (nível 1 a 5), do posto veterinário, e custo de cura
+const GER_CERCAS=400,GER_CONS=5,ENERGIA_USA=['pesquisa','lab','incubacao','museu','comida','sorvete','cachorro','lembranca','banheiro_m','banheiro_f','torre','seguranca','estacao','veterinario','documentarios'];
 
 </script>
 <script>
@@ -777,6 +778,7 @@ const Grade={
   if(b.rampa){const ang=Math.atan2(4.4,d),len=Math.hypot(d,4.4);const rp=S(new THREE.BoxGeometry(w*.9,.25,len),0x9aa4ae,0,2.2,0);rp.rotation.x=-ang;
    [-1,1].forEach(sg=>{const tr=S(new THREE.BoxGeometry(.06,.3,len),0xf2c200,sg*w*.46,2.45,0);tr.rotation.x=-ang});
    for(let k=1;k<d;k++){const y=4.4*k/d,z=-d/2+k;M(w*.9,.06,.12,0x3a3f45,0,y+.02,z)}return g}
+   if(b.doc){M(w+.5,.3,d+.5,T.tx('concreto',w/2,d/2),0,0,0);M(w-.6,3,d-.6,0x3a3f55,0,0,0);M(w-.2,.3,d-.2,0x22242f,0,3,0);M(1.2,2.1,.12,0x1a1a22,0,0,d/2-.28);M(3.2,1.1,.1,0x9ad0ff,0,1.3,d/2-.26);M(3.4,.18,.12,0xf2c200,0,2.55,d/2-.26);return g}
    if(b.boasv){M(w+.5,.3,d+.5,T.tx('concreto',w/2,d/2),0,0,0);M(w-1,3.2,3,0xe9e2cf,0,0,-1);M(w-.4,.3,3.6,0x2f6f57,0,3.2,-1);M(1.4,2.2,.12,0x3a2a1a,0,0,.52);M(2.6,.45,.12,0xf2c200,0,2.55,.54);
    [-1,1].forEach(sg=>{const x=sg*(w/2-.9);C(.3,.38,.9,0x9aa4ae,x,0,1.7,10);C(.5,.5,.12,0x6fb7e6,x,.9,1.7,12);C(.05,.05,.35,0x9aa4ae,x,1.0,1.7,6)});
    M(1.8,.45,1.3,0x8a8d90,0,0,1.7);M(1.1,.5,.45,0x6e8a5a,0,.45,1.7);M(.22,.6,.2,0x6e8a5a,.5,.9,1.7);M(.42,.24,.26,0x6e8a5a,.66,1.45,1.7);M(.9,.14,.14,0x6e8a5a,-.95,.7,1.7);M(.14,.45,.14,0x6e8a5a,-.25,0,1.7);M(.14,.45,.14,0x6e8a5a,.25,0,1.7);return g}
@@ -1155,7 +1157,7 @@ const Arte={
 <script>
 // Parte 2: estado, economia, genética, incubação, expedições, fósseis, necessidades e manutenção
 const CUSTO={explorar:200,escavar:50,reparoPeca:2}; // provisórios: o Passo 3 não define o custo da expedição nem do reparo das cercas
-const PTS_CONS={veterinario:30,boasvindas:30,rampa:10,sorvete:20,cachorro:20,pedra3:0,pedra4:0,pedra6:0,pedra8:0,pedra12:0,pedra16:0,palmeira:0,palmeira2:0,samambaia:0,bambu:0,arvore:0,araucaria:0,estatua2:0,mov:0,estacao:30,cerca:0,caminho:0,pesquisa:40,lab:40,incubacao:40,museu:40,portao:30,comida:30,lembranca:30,banheiro_m:25,banheiro_f:25,torre:30,heli:30,jipe:15,mono:25,seguranca:30,gerador:30},INFRA=['seguranca','gerador','mono'];
+const PTS_CONS={documentarios:30,veterinario:30,boasvindas:30,rampa:10,sorvete:20,cachorro:20,pedra3:0,pedra4:0,pedra6:0,pedra8:0,pedra12:0,pedra16:0,palmeira:0,palmeira2:0,samambaia:0,bambu:0,arvore:0,araucaria:0,estatua2:0,mov:0,estacao:30,cerca:0,caminho:0,pesquisa:40,lab:40,incubacao:40,museu:40,portao:30,comida:30,lembranca:30,banheiro_m:25,banheiro_f:25,torre:30,heli:30,jipe:15,mono:25,seguranca:30,gerador:30},INFRA=['seguranca','gerador','mono'];
 const PONTOS=[[-110,45,'Montana, EUA','Grandes Carnívoros'],[-70,-45,'Patagônia, Argentina','Grandes Herbívoros'],[-40,-8,'Nordeste, Brasil',null],[-5,32,'Marrocos','Carnívoros Ágeis'],[8,18,'Deserto do Níger','Grandes Carnívoros'],[35,-6,'Tendaguru, Tanzânia','Grandes Herbívoros'],[-3,57,'Escócia',null],[105,45,'Gobi, Mongólia','Herbívoros Blindados'],[122,42,'Liaoning, China','Dinossauros de Crista'],[78,20,'Índia Central',null],[-112,52,'Alberta, Canadá','Dinossauros de Crista'],[145,-22,'Queensland, Austrália','Carnívoros Ágeis']];
 const MANUT_TIPOS={gerador:{n:'Gerador de Energia',d:'Falha no regulador de tensão: o gerador parou de fornecer energia.',f:.3},banheiro_m:{n:'Banheiro masculino',d:'Encanamento entupido: banheiro indisponível.',f:.25},banheiro_f:{n:'Banheiro feminino',d:'Encanamento entupido: banheiro indisponível.',f:.25},comida:{n:'Lanchonete de Hambúrguer',d:'Equipamento de cozinha quebrado: a loja está parada.',f:.3},sorvete:{n:'Sorveteria e Sucos',d:'Freezer com defeito: a loja está parada.',f:.3},cachorro:{n:'Cachorro-Quente',d:'Chapa quebrada: a barraca está parada.',f:.3},lembranca:{n:'Loja de Lembrancinhas',d:'Caixa registradora com defeito: a loja está parada.',f:.3},museu:{n:'Museu de Fósseis',d:'Vazamento no telhado: museu fechado até o reparo.',f:.2},torre:{n:'Torre de Observação',d:'Elevador com defeito: torre fechada.',f:.25},mono:{n:'Monotrilho',d:'Trilho danificado: trecho interditado até a manutenção.',f:4},equip:{n:'Bebedouro/abastecimento do cercado',d:'Equipamento com defeito: água e comida deste cercado pararam.',f:.4}};
 const $$=(s,r=document)=>r.querySelector(s);
@@ -1193,7 +1195,7 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
    Grade.C.forEach((c,k)=>{if(c.livre.length>=4&&this.bemEstar(k)>=80&&G.dinos.some(d=>d.pl&&Grade.cid[d.j*160+d.i]===k))P('bem80',25,'d','Cercado com bem-estar acima de 80%')});if(this.cnt('veterinario')&&G.dinos.some(d=>d.curado))P('vet1',15,'i','Primeiro dinossauro curado')},
  // tutorial: ordem obrigatória no início para não gastar o dinheiro inicial à toa
  passoTut(){const G=this.G,n=id=>this.cnt(id);if(G.tutFim||G.dinos.some(d=>d.pl))return null;return!n('heli')?'heli':!n('portao')?'portao':!n('lab')?'lab':!n('incubacao')?'incubacao':!Grade.C.some(c=>c.livre.length>=4)?'cerca':null},
- bloqueio(b){if(b.rem)return null;const p=this.passoTut(),N={heli:'o Heliporto',portao:'o Portão Principal',lab:'o Laboratório de DNA',incubacao:'a Incubadora',cerca:'o primeiro cercado',gerador:'o Gerador',seguranca:'o Posto de Segurança'};
+ bloqueio(b){if(b.rem)return null;if(b.est&&this.nivel()<b.est*2)return '🔒 Libera com '+b.est+' estrelas do parque';const p=this.passoTut(),N={heli:'o Heliporto',portao:'o Portão Principal',lab:'o Laboratório de DNA',incubacao:'a Incubadora',cerca:'o primeiro cercado',gerador:'o Gerador',seguranca:'o Posto de Segurança'};
   if(p&&b.id!==p)return 'Tutorial: construa primeiro '+N[p];if(b.id==='pesquisa'&&!this.G.desc.length)return 'Obtenha seu primeiro dinossauro para liberar o Centro de Pesquisa';return null},
  // passo final do tutorial: Heliporto, Laboratório e Incubadora ligados ao Portão por caminhos (os visitantes chegam com o 1º dinossauro, com ou sem caminhos)
  tutCaminhos(){const L=Grade.L;return L.some(e=>e.t==='caminho')&&['heli','lab','incubacao'].every(t=>{const a=L.filter(e=>e.t===t);return!a.length||a.some(e=>e.ac)})},
@@ -1211,12 +1213,12 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
  bemMapa(){if(this._bmV===Grade.ver&&this._bmL===Grade.L)return this._bm;const pts={};Grade.L.forEach(e=>{const k=Grade.cid[e.j*160+e.i];if(!(k>=0))return;const b=Grade.bd(e.t);if(b&&(b.veg||b.planta||e.t==='planta'||/^pedra/.test(e.t)))pts[k]=(pts[k]||0)+1});this._bm=pts;this._bmV=Grade.ver;this._bmL=Grade.L;return pts},
  bemEstar(k){const C=Grade.C[k];if(!C)return 50;const pts=this.bemMapa()[k]||0,need=Math.max(2,Math.ceil(C.cel.length/40));return Math.round(clamp(25+75*Math.min(1,pts/need),25,100))},
  // por segundo: calcula o bem-estar médio e sorteia doenças (cercado sem plantas/pedras adoece mais)
- saude(){const G=this.G,BE={};let soma=0,nd=0,doentes=0;G.dinos.forEach(d=>{if(!d.pl)return;const k=Grade.cid[d.j*160+d.i];if(!(k>=0))return;if(BE[k]===undefined)BE[k]=this.bemEstar(k);const bem=BE[k];soma+=bem;nd++;
-   if(!d.doente&&Math.random()<(bem<50?1/(DIA_SEG*1.2):bem<75?1/(DIA_SEG*4):1/(DIA_SEG*12))){d.doente=1;this.notif('🤒',d.nome+' adoeceu',this.cnt('veterinario')?'Toque para abrir o Posto Veterinário.':'Construa um Posto Veterinário para curar.',()=>{if(this.cnt('veterinario'))this.vet()})}
+ saude(){const G=this.G,BE={},lib=this.nivel()>=6;let soma=0,nd=0,doentes=0;G.dinos.forEach(d=>{if(!d.pl)return;const k=Grade.cid[d.j*160+d.i];if(!(k>=0))return;if(BE[k]===undefined)BE[k]=this.bemEstar(k);const bem=BE[k];soma+=bem;nd++;
+   if(lib&&!d.doente&&Math.random()<(bem<50?1/(DIA_SEG*1.2):bem<75?1/(DIA_SEG*4):1/(DIA_SEG*12))){d.doente=1;this.notif('🤒',d.nome+' adoeceu',this.cnt('veterinario')?'Toque para abrir o Posto Veterinário.':'Construa um Posto Veterinário para curar.',()=>{if(this.cnt('veterinario'))this.vet()})}
    if(d.doente)doentes++});this.bemMed=nd?soma/nd:70;this.nDoentes=doentes},
- manutencao(){const G=this.G,H=G.hoje;if(!H)return;let taxa=0;G.dinos.forEach(d=>{if(d.pl){let nv=1;try{nv=espDe(d).nv||1}catch(e){}taxa+=MAN_DINO[Math.min(4,nv-1)]}});taxa+=this.cnt('veterinario')*MAN_VET;const x=taxa/DIA_SEG;G.din=Math.max(0,G.din-x);H.man=(H.man||0)+x},
+ manutencao(){const G=this.G,H=G.hoje;if(!H)return;let taxa=0;G.dinos.forEach(d=>{if(d.pl){let nv=1;try{nv=espDe(d).nv||1}catch(e){}taxa+=d.hib?MAN_HIB:MAN_DINO[Math.min(4,nv-1)]}});for(const t in MAN_CONS)taxa+=this.cnt(t)*MAN_CONS[t];const x=taxa/1200;G.din=Math.max(0,G.din-x);H.man=(H.man||0)+x},
  vet(){const G=this.G,doentes=G.dinos.filter(d=>d.doente);this.atual=null;if(!this.en){this.toast('Sem energia: o posto veterinário não funciona.');return}
-  this.modal('Posto Veterinário',`<p>Manutenção do posto: <b>${fmt(MAN_VET)}/dia</b> · curar custa conforme o nível do dinossauro.</p>${doentes.map(d=>`<div class="op">${silH(d.sp,26)}${d.nome} (${espDe(d).nome}) 🤒 <button class="bt peq" data-c="${d.id}">Curar (${fmt(CURA_DINO[Math.min(4,(espDe(d).nv||1)-1)])})</button></div>`).join('')||'<i>Nenhum dinossauro doente.</i>'}<p><small>Dinossauros em cercados com poucas plantas e pedras adoecem mais.</small></p>`,
+  this.modal('Posto Veterinário',`<p>Manutenção do posto: <b>${fmt(Math.round(MAN_VET*DIA_SEG/1200))}/dia</b> · curar custa conforme o nível do dinossauro.</p>${doentes.map(d=>`<div class="op">${silH(d.sp,26)}${d.nome} (${espDe(d).nome}) 🤒 <button class="bt peq" data-c="${d.id}">Curar (${fmt(CURA_DINO[Math.min(4,(espDe(d).nv||1)-1)])})</button></div>`).join('')||'<i>Nenhum dinossauro doente.</i>'}<p><small>Dinossauros em cercados com poucas plantas e pedras adoecem mais.</small></p>`,
    r=>r.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{const d=G.dinos.find(x=>x.id===b.dataset.c);if(!d)return;const c=CURA_DINO[Math.min(4,(espDe(d).nv||1)-1)];if(G.din<c){this.toast('Dinheiro insuficiente');return}G.din-=c;d.doente=0;d.curado=1;this.sujo=1;this.hud();this.toast('💉 '+d.nome+' foi curado.');this.vet()}))},
  fac(e){const G=this.G,k=e.i+'_'+e.j;this.atual=null;this.modal(CONSTR.find(x=>x.id===e.t).nome,`<p>Energia: <b>${this.en?'com energia':'sem energia'}</b></p><p>Condição: <b>${Math.round(G.cond[k]===undefined?100:G.cond[k])}%</b> · Situação: <b>${this.quebrado(e)?'🔧 em manutenção (toque no ícone vermelho)':'funcionando'}</b></p>`)},
  cInc(o){return o.hib?CUSTO_INC_MOD:CUSTO_INC[espDe(o).nv-1]},
@@ -1235,12 +1237,12 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
   if(cr){al.hidden=false;this.ih(al,cr.fase==='espera'?'⚡ QUEDA DE ENERGIA — use o Modo Jogador: corra até o Posto de Segurança e desça ao subsolo ('+Math.floor(cr.t/60)+':'+String(cr.t%60).padStart(2,'0')+')':'⚡ Reativando a energia no subsolo...')}
   else if(G.prob){al.hidden=false;this.ih(al,'🔧 Manutenção pendente — toque no ícone vermelho sobre a construção')}else al.hidden=true;if(typeof travar==='function')travar()},
  tick(){const G=this.G,L=Grade.L,n=id=>this.cnt(id),cercas=L.filter(e=>e.t==='cerca').length,gs=L.filter(e=>e.t==='gerador'&&!this.quebrado(e)).length,cons=L.filter(e=>ENERGIA_USA.includes(e.t)).length,en=!G.apagao&&gs>0&&cercas<=gs*GER_CERCAS&&cons<=gs*GER_CONS,ab=n('seguranca')>0&&gs>0&&!G.apagao,pl=G.dinos.filter(d=>d.pl),now=Date.now();this.en=en;this.ab=ab;this.manutencao();
-  G.h+=24/DIA_SEG;G.rel=(G.rel||0)+1;if(G.h>=24){G.h-=24;G.dia++;G.hoje={vis:0,ing:0,com:0,lem:0,tor:0}}
+  G.h+=24/DIA_SEG;G.rel=(G.rel||0)+1;if(G.h>=24){G.h-=24;G.dia++;G.hoje={vis:0,ing:0,com:0,lem:0,tor:0,doc:0,mus:0,man:0}}
   pl.forEach(d=>{if(ab&&!this.equipQ(Grade.cid[d.j*160+d.i])){d.fome=Math.min(100,(d.fome==null?100:d.fome)+2);d.sede=Math.min(100,(d.sede==null?100:d.sede)+3)}else{d.fome=Math.max(0,d.fome-.06);d.sede=Math.max(0,d.sede-.09)}d.bem=(d.fome+d.sede)/2});
   G.cercaInt=Math.max(0,G.cercaInt-cercas*.0008);
   // receita só existe se a construção existe, é acessível por caminhos, tem energia e não está em manutenção
-  const ok=t=>en&&L.some(e=>e.t===t&&!this.quebrado(e));this.uso={comida:FOODS.some(t=>ok(t)),lembranca:ok('lembranca'),torre:ok('torre'),museu:ok('museu')};
-  this.saude();const p=G.preco,mp=p<=12?1+(12-p)*.025:Math.max(0,1-Math.pow((p-12)/28,1.2)),kd=pl.length,esp=new Set(pl.map(d=>espDe(d).id)).size,at=[...FOODS,'lembranca','torre','banheiro_m','banheiro_f','museu','fonte','estatua','estatua2'].filter(t=>L.some(e=>e.t===t)).length,V=6*(kd?12+2*Math.pow(kd-1,.6)+1.5*Math.pow(Math.max(0,esp-1),.7)+2*Math.pow(Math.min(at,6),.8):1)*(1+.12*this.nivel())*(.92+.16*(this.bemMed||70)/100)*(1-.05*Math.min(6,this.nDoentes||0))*mp*(.5+.5*G.satis/100)*Math.min(1,.8+.1*(G.dia-1)),w=.25;
+  const ok=t=>en&&L.some(e=>e.t===t&&!this.quebrado(e));this.uso={comida:FOODS.some(t=>ok(t)),lembranca:ok('lembranca'),torre:ok('torre'),museu:ok('museu'),docs:ok('documentarios')};
+  this.saude();const p=G.preco,mp=p<=12?1+(12-p)*.025:Math.max(0,1-Math.pow((p-12)/28,1.2)),kd=pl.length,esp=new Set(pl.map(d=>espDe(d).id)).size,at=[...FOODS,'lembranca','torre','documentarios','banheiro_m','banheiro_f','museu','fonte','estatua','estatua2'].filter(t=>L.some(e=>e.t===t)).length,V=kd?50*Math.pow(pl.reduce((s,d,i)=>s+(i===0?5:d.hib?7:[3,5,8,10,12][Math.min(4,(espDe(d).nv||1)-1)]),0)/5,.6)*(1+.05*Math.min(at,7))*(.9+.2*G.satis/100)*(.92+.16*(this.bemMed||70)/100)*(1-.05*Math.min(6,this.nDoentes||0))*mp*Math.min(1,.8+.1*(G.dia-1)):3,w=.25;
   if(pl.length&&n('heli')>0&&n('portao')>0&&!G.bv5){G.bv5=1;this.sujo=1;for(let i=0;i<5;i++)this.chegou();this.toast('🎟️ Os primeiros 5 visitantes chegaram ao parque!')}
   this.demanda=V;this.rodizio(n('portao')>0&&n('heli')>0?V:0);
   const dec=L.filter(e=>DECOR.includes(e.t)).length,bm=L.some(e=>e.t==='banheiro_m'&&!this.quebrado(e)),bf=L.some(e=>e.t==='banheiro_f'&&!this.quebrado(e)),
@@ -1255,9 +1257,10 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
   G.coh=G.coh.filter(c=>c.a<120000);G.vis=G.coh.reduce((s,c)=>s+c.n,0)},
  chegou(){const G=this.G,u=this.uso,H=G.hoje,p=G.preco;G.din+=p;H.ing+=p;H.vis++;G.tv++;
   if(u.comida&&Math.random()<.25){const s=8+Math.random()*4;G.din+=s;H.com+=s;this.pontos('uso_comida',10,'v','Primeira venda de alimentação')}
-  if(u.lembranca&&Math.random()<.40){const s=10+Math.random()*10;G.din+=s;H.lem+=s;this.pontos('uso_lem',10,'v','Primeira venda de lembrancinhas')}
+  if(u.lembranca&&Math.random()<.25){const s=10+Math.random()*10;G.din+=s;H.lem+=s;this.pontos('uso_lem',10,'v','Primeira venda de lembrancinhas')}
   if(u.torre&&Math.random()<.10){G.din+=10;H.tor+=10;this.pontos('uso_torre',10,'v','Primeira subida na Torre de Observação')}
 if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
+   if(u.docs&&Math.random()<.10){G.din+=10;H.doc=(H.doc||0)+10}
   Vis.spawn()},
  nascer(o){const G=this.G,e=espDe(o),novo=!G.desc.includes(o.sp),r={id:Date.now()+'-'+(this.uid++),sp:o.sp,nome:e.nome+' '+(G.dinos.filter(d=>d.sp===o.sp).length+1),legit:!!o.legit,hib:o.hib,fome:100,sede:100,bem:100,pl:false,i:0,j:0};
   G.dinos.push(r);if(novo)G.desc.push(o.sp);this.notif('🥚','Nasceu: '+r.nome+(r.legit?' (Legítimo)':''),'Coloque-o num cercado. Toque para abrir a Incubadora.',()=>this.incub());
@@ -1401,8 +1404,8 @@ if(u.museu&&Math.random()<.5){G.din+=5;H.mus=(H.mus||0)+5}
    r=>{r.querySelectorAll('.fg[data-k]').forEach(el=>this.fosGrade(el,G.fosP[+el.dataset.k],-1,64,40));$$('#b-ent',r).onclick=()=>window.entrarMuseu()})},
  portao(){const G=this.G,H=G.hoje,u=this.uso||{};this.atual=null;
   this.modal('Portão Principal / Bilheteria',`<p>Ingresso: <b id="pv">${fmt(G.preco)}</b></p><input type="range" id="pr" min="5" max="60" value="${G.preco}" style="width:100%"><p><small>Ingresso caro reduz a procura e a satisfação: o maior preço não dá o maior lucro.</small></p>
-   <p>Dia ${G.dia} · ${G.h>=6&&G.h<18?'☀️ Dia':'🌙 Noite'} · Visitantes hoje: <b>${H.vis}</b> (procura estimada: ${Math.round(this.demanda||0)}/dia) · Satisfação: <b>${Math.round(G.satis)}%</b></p>
-   <p>Receita de hoje — ingressos ${fmt(H.ing)} · alimentação ${fmt(H.com)} · lembrancinhas ${fmt(H.lem)} · torre ${fmt(H.tor)} · manutenção -${fmt(H.man||0)}</p><p>Funcionando agora: alimentação ${u.comida?'✔':'✖'} · lembrancinhas ${u.lembranca?'✔':'✖'} · torre ${u.torre?'✔':'✖'}</p>`,
+   <p>Dia ${G.dia} · ${G.h>=6&&G.h<18?'☀️ Dia':'🌙 Noite'} · Visitantes hoje: <b>${H.vis}</b> (procura estimada: ${Math.round((Math.round(this.demanda||0))*DIA_SEG/1200)}/dia) · Satisfação: <b>${Math.round(G.satis)}%</b></p>
+   <p>Receita de hoje — ingressos ${fmt(H.ing)} · alimentação ${fmt(H.com)} · lembrancinhas ${fmt(H.lem)} · torre ${fmt(H.tor)} · documentários ${fmt(H.doc||0)} · manutenção -${fmt(H.man||0)}</p><p>Funcionando agora: alimentação ${u.comida?'✔':'✖'} · lembrancinhas ${u.lembranca?'✔':'✖'} · torre ${u.torre?'✔':'✖'}</p>`,
    r=>$$('#pr',r).oninput=e=>{G.preco=+e.target.value;$$('#pv',r).textContent=fmt(G.preco);this.sujo=1})},
  posto(){const G=this.G,c=Grade.L.filter(e=>e.t==='cerca').length,custo=Math.round(c*CUSTO.reparoPeca*(100-G.cercaInt)/100),fg=G.fug.map(id=>G.dinos.find(d=>d.id===id)).filter(Boolean);this.atual=null;
   this.modal('Posto de Segurança',`<p>⚡ Energia: <b>${this.en?'com energia':G.apagao?'QUEDA DE ENERGIA — Modo Jogador: desça ao subsolo':'sem energia — cada gerador sustenta 5 construções e 400 cercas'}</b> · Abastecimento: <b>${this.ab?'ativo':'parado'}</b></p><p><small>O painel elétrico principal fica no subsolo (Modo Jogador, junto ao Posto).</small></p>
@@ -1492,31 +1495,31 @@ const Subsolo={on:false,yaw:0,pitch:0,ty:0,snap:false,areas:[],fim:0,msg:'',ativ
  abrir(){this.init();const G=Jogo.G,c=G.crise;this.areas=[];this.ativo=!!c;this.fim=0;this.msg='';
   Grade.C.forEach((C,k)=>{if(G.dinos.some(d=>d.pl&&Grade.cid[d.j*160+d.i]===k)){let x0=99,z0=99,x1=0,z1=0;C.cel.forEach(m=>{const i=m%160,j=(m/160)|0;x0=Math.min(x0,i);x1=Math.max(x1,i);z0=Math.min(z0,j);z1=Math.max(z1,j)});
    this.areas.push({k,nome:'CERCADO '+(this.areas.length+1),hold:CRISE_CFG.holdMin+Math.random()*(CRISE_CFG.holdMax-CRISE_CFG.holdMin),p:0,on:!c||(c.ok||[]).includes(k),fl:!!(c&&(c.fl||[]).includes(k)),seg:false,bb:[x0,z0,x1,z1]})}});
-  this.areas.push({k:-1,nome:'ÁREA VISITANTES',hold:CRISE_CFG.holdMin+Math.random()*(CRISE_CFG.holdMax-CRISE_CFG.holdMin),p:0,on:!c||(c.ok||[]).includes(-1),fl:true,seg:false});
-  this.rh=this.areas.length>6?42:50;if(c)c.fase='console';
+  this.areas.push({k:-1,nome:'ÁREA VISITANTES',hold:CRISE_CFG.holdMin+Math.random()*(CRISE_CFG.holdMax-CRISE_CFG.holdMin),p:0,on:!c||(c.ok||[]).includes(-1),fl:false,seg:false});
+  this.rh=this.areas.length>6?42:50;if(c){c.fase='console';if(c.sinais==null){c.sinais=this.areas.length;c.fuga=0}c.tf=2*this.areas.reduce((s,a)=>s+a.hold,0)/this.areas.length}
   this.yaw=0;this.pitch=.2;this.ty=0;this.snap=false;this.on=true;est='subsolo';document.querySelector('#hud').hidden=true;document.querySelector('#b-ctx').hidden=true;document.querySelector('#sub-ui').hidden=false},
  sair(){this.on=false;const c=Jogo.G.crise;if(c&&c.fase==='console')c.fase='espera';est='parque';document.querySelector('#hud').hidden=false;document.querySelector('#sub-ui').hidden=true},
  siren(){try{const A=this.ac||(this.ac=new(window.AudioContext||window.webkitAudioContext)()),o=A.createOscillator(),g=A.createGain(),t=A.currentTime;o.type='sawtooth';o.connect(g);g.connect(A.destination);g.gain.value=.07;o.frequency.setValueAtTime(500,t);o.frequency.linearRampToValueAtTime(900,t+.6);o.frequency.linearRampToValueAtTime(500,t+1.2);o.start(t);o.stop(t+1.2)}catch(e){}},
  bip(){try{const A=this.ac||(this.ac=new(window.AudioContext||window.webkitAudioContext)()),o=A.createOscillator(),g=A.createGain();o.connect(g);g.connect(A.destination);g.gain.value=.06;o.frequency.value=880;o.start();o.stop(A.currentTime+.12)}catch(e){}},
- sinalizador(){if(!this.ativo||this.fim)return;const a=this.areas.find(x=>!x.fl);if(!a)return;a.fl=true;const c=Jogo.G.crise;c.fl=c.fl||[];c.fl.push(a.k);this.siren()},
+ sinalizador(){if(!this.ativo||this.fim)return;const c=Jogo.G.crise;if(!c||!(c.sinais>0))return;c.sinais--;c.fuga=0;this.siren()},
  update(dt){if(!this.on)return;const G=Jogo.G,c=G.crise;
   if(this.snap)this.yaw+=(this.ty-this.yaw)*Math.min(1,dt*6);
   const cp=Math.cos(this.pitch);this.cam.position.set(0,2.0,.4);this.cam.lookAt(Math.sin(this.yaw)*cp*5,2.0+Math.sin(this.pitch)*5,.4-Math.cos(this.yaw)*cp*5);
   this.lamp.intensity=1+(Math.random()<.06?-.7:0);this.red.intensity=this.ativo&&!this.fim?1.2+Math.sin(performance.now()*.01)*1.1:0;
   if(this.ativo&&c&&!this.fim){
    this.areas.forEach(a=>{if(a.on)return;if(a.seg){a.p+=dt/a.hold;if(a.p>=1){a.p=1;a.on=true;a.seg=false;c.ok=c.ok||[];c.ok.push(a.k);this.bip()}}else a.p=Math.max(0,a.p-dt*1.5/a.hold)});
-   const n=this.areas.length,unp=this.areas.filter(a=>!a.on).length,din=this.areas.filter(a=>a.k>=0),unf=din.filter(a=>!a.fl).length,r0=100/(2*(n*7+4)),rate=r0*(.35+.65*unp/n)*(1+.7*(din.length?unf/din.length:0));
-   c.alerta=Math.min(100,(c.alerta||0)+rate*dt);
+   const n=this.areas.length,unp=this.areas.filter(a=>!a.on).length,din=this.areas.filter(a=>a.k>=0),unf=din.filter(a=>!a.fl).length,r0=100/(2*(n*7+4)),rate=r0*(.35+.65*unp/n);
+   c.alerta=Math.min(100,(c.alerta||0)+rate*dt);c.fuga=Math.min(100,(c.fuga||0)+100/(c.tf||14)*dt);
    if(!unp){this.fim=1;this.msg='SISTEMA RESTAURADO';setTimeout(()=>{Jogo.criseSucesso();this.sair()},2200)}
-   else if(c.alerta>=100){this.fim=1;this.msg='ALERTA DE FUGA!';const sev=.5+.5*unp/n;setTimeout(()=>{Jogo.criseFalha(sev);this.sair()},2200)}}
+   else if(c.alerta>=100||c.fuga>=100){this.fim=1;this.msg=c.fuga>=100?'OS DINOSSAUROS FUGIRAM!':'TEMPO ESGOTADO!';const sev=.5+.5*unp/n;setTimeout(()=>{Jogo.criseFalha(sev);this.sair()},2200)}}
   this.desenhar()},
  desenhar(){const x=this.tc.getContext('2d'),W=640,H=400,c=Jogo.G.crise,t=performance.now();x.textBaseline='top';x.textAlign='left';x.font='bold 17px Courier New';x.fillStyle='#07140f';x.fillRect(0,0,W,H);
   x.fillStyle='#9fe8b8';x.fillText('PAINEL ELÉTRICO',10,8);
-  const al=c?c.alerta||0:0;x.strokeStyle='#9fe8b8';x.strokeRect(300,6,330,22);x.fillStyle=al>66?'#ff3a2a':'#d8a020';x.fillRect(302,8,326*al/100,18);x.fillStyle='#fff';x.fillText('ALERTA DE FUGA '+Math.round(al)+'%',306,10);
+  const al=c?c.alerta||0:0,fg=c?c.fuga||0:0;x.strokeStyle='#9fe8b8';x.strokeRect(300,3,330,22);x.fillStyle=al>66?'#ff3a2a':'#d8a020';x.fillRect(302,5,326*al/100,18);x.fillStyle='#fff';x.fillText('TEMPO '+Math.round(al)+'%',306,6);x.strokeStyle='#ffb35a';x.strokeRect(300,27,330,20);x.fillStyle=fg>66?'#ff3a2a':'#e86a1a';x.fillRect(302,29,326*fg/100,16);x.fillStyle='#fff';x.fillText('DINOS FUGINDO '+Math.round(fg)+'%',306,28);
   this.areas.forEach((a,i)=>{const y=70+i*this.rh;x.strokeStyle='#9fe8b8';x.strokeRect(10,y,205,this.rh-8);x.fillStyle=a.on?'#1f5a35':'#4a4a16';x.fillRect(12,y+2,201*(a.on?1:a.p),this.rh-12);x.fillStyle='#e8fff0';x.fillText(a.nome,16,y+3);x.fillStyle=a.on?'#7dff9a':'#ff8a7a';x.fillText(a.on?'ENERGIA OK':(this.ativo?'RESTART (segure)':'—'),16,y+(this.rh>45?22:19))});
   x.strokeStyle='#cfeedd';x.strokeRect(235,50,390,300);const s=3.1;x.strokeRect(300,52,96*s,96*s>296?296:96*s);
   this.areas.forEach(a=>{if(!a.bb)return;const bx=300+a.bb[0]*s,by=52+a.bb[1]*s;x.strokeStyle='#cfeedd';x.strokeRect(bx,by,(a.bb[2]-a.bb[0]+1)*s,(a.bb[3]-a.bb[1]+1)*s);x.fillStyle=a.on?'#4aff7a':'#ff3a2a';x.beginPath();x.arc(bx+4,by+4,3.5,0,6.3);x.fill();if(a.fl){x.fillStyle='#ffd24a';x.fillText('✱',bx+8,by-1)}});
-  const din=this.areas.filter(a=>a.k>=0);x.fillStyle='#9fe8b8';x.fillText(this.ativo?'SINALIZADORES: '+din.filter(a=>a.fl).length+'/'+din.length+'  (botão vermelho à direita)':'SISTEMA NORMAL',10,362);x.fillText(this.ativo?'SEGURE RESTART EM CADA ÁREA ATÉ 100%':'',10,380);
+  const din=this.areas.filter(a=>a.k>=0);x.fillStyle='#9fe8b8';x.fillText(this.ativo?'SINALIZADORES: '+(c&&c.sinais!=null?c.sinais:this.areas.length)+'/'+this.areas.length+' (botão à direita)':'SISTEMA NORMAL',10,356);x.fillText(this.ativo?'RESTART NAS ÁREAS · SINALIZADOR PÁRA A FUGA':'',10,376);
   for(let i=0;i<260;i++){x.fillStyle='rgba(190,255,210,'+Math.random()*.1+')';x.fillRect(Math.random()*W,Math.random()*H,2+Math.random()*30,1)}
   x.fillStyle='rgba(0,0,0,.28)';for(let y=0;y<H;y+=3)x.fillRect(0,y,W,1);x.fillStyle='rgba(160,255,200,.06)';x.fillRect(0,(t*.15)%H,W,18);
   if(this.msg){x.fillStyle='rgba(0,0,0,.7)';x.fillRect(150,150,340,80);x.fillStyle='#fff';x.font='bold 24px Courier New';x.textAlign='center';x.fillText(this.msg,320,178)}
