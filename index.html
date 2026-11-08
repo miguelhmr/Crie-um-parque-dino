@@ -411,7 +411,7 @@ const VIS_DIA=[60,90,130,180,240,320,420,540,680,840,1000]; // visitantes/dia po
 const PONTOS_NV=[90,230,420,650,930,1250,1620,2040,2470,2900]; // pontos acumulados por nível (não são gastos)
 const NOMES_NV=['Projeto Pioneiro','Parque em Formação','A Grande Descoberta','Parque Consolidado','Maravilha Pré-Histórica','Complexo Científico','Santuário dos Gigantes','Potência Paleontológica','Império Pré-Histórico','Legado da Era dos Gigantes'];
 const GER_POR_NIVEL=[1,1,2,2,3,3,4,4,5,5,5];          // nível genético liberado em cada nível do parque (índice = nível)
-const CUSTO_PESQ=[200,400,700,1100,1600],CUSTO_INC=[100,200,350,550,800],CUSTO_PESQ_MOD=1000,CUSTO_INC_MOD=1200;
+const CUSTO_PESQ=[200,400,700,1100,1600],CUSTO_INC=[60,120,200,320,480],CUSTO_PESQ_MOD=1000,CUSTO_INC_MOD=700;
 
 // ---- Clima, crises e manutenção (Passo 4) — valores base ajustáveis
 const CLIMA_CFG={noite:{tempestade:.30,chuva:.55},dia:{tempestade:.20,chuva:.40},rolagem:300}; // tempestade = chance de sorteio; chuva = chance acumulada de qualquer chuva (inclui tempestade) // chances por sorteio; rolagem = segundos de jogo entre sorteios
@@ -1176,7 +1176,7 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
  dinosNv(g){return this.G.dinos.filter(d=>{try{return espDe(d).nv===g}catch(e){return false}}).length},
  // subir para um nível que libera um novo nível genético exige 3 dinossauros do nível genético atual
  nivel(){let n=0;for(let i=0;i<PONTOS_NV.length;i++){if(this.G.pts<PONTOS_NV[i])break;if(GER_POR_NIVEL[i+1]>GER_POR_NIVEL[n]&&this.dinosNv(GER_POR_NIVEL[n])<3)break;n=i+1}return n},
- reqNivel(){const n=this.nivel();if(n>=10)return'';const g=GER_POR_NIVEL[n];if(GER_POR_NIVEL[n+1]>g)return'<p>Para subir ao nível '+(n+1)+' você precisa de <b>3 dinossauros de nível '+g+'</b> (você tem <b>'+this.dinosNv(g)+'</b>).</p>';return''},
+ reqNivel(){const n=this.nivel();if(n>=10)return'';const g=GER_POR_NIVEL[n],falta=Math.max(0,PONTOS_NV[n]-this.G.pts),trava=GER_POR_NIVEL[n+1]>g&&this.dinosNv(g)<3;if(!falta&&!trava)return'';return'<p>Para subir ao nível '+(n+1)+(falta?' faltam <b>'+falta+'</b> pontos':'')+(falta&&trava?' e':'')+(trava?' você precisa de <b>3 dinossauros de nível '+g+'</b> (você tem <b>'+this.dinosNv(g)+'</b>)':'')+'.</p>'},
  avisos(){const G=this.G,n=this.nivel();if(G.nvv==null)G.nvv=n;else if(n>G.nvv){const ant=G.nvv;G.nvv=n;this.notif('⭐','Seu parque subiu de nível!',(n/2).toString().replace('.',',')+'★ — '+NOMES_NV[n-1]+(GER_POR_NIVEL[n]>GER_POR_NIVEL[ant]?' · nível genético '+GER_POR_NIVEL[n]+' liberado!':''),()=>this.progresso())}
   G.nvs=G.nvs||{};G.dinos.forEach(d=>{let e;try{e=espDe(d)}catch(x){return}if(e&&e.nv&&!G.nvs[e.nv]){G.nvs[e.nv]=1;this.notif('🦖','Primeiro dinossauro de nível '+e.nv+'!',e.nome+' é o seu primeiro dinossauro de nível '+e.nv+'.')}})},
  ger(){return GER_POR_NIVEL[this.nivel()]},
@@ -1242,7 +1242,7 @@ const Jogo={G:null,ac:0,uid:1,sel:null,
   G.cercaInt=Math.max(0,G.cercaInt-cercas*.0008);
   // receita só existe se a construção existe, é acessível por caminhos, tem energia e não está em manutenção
   const ok=t=>en&&L.some(e=>e.t===t&&!this.quebrado(e));this.uso={comida:FOODS.some(t=>ok(t)),lembranca:ok('lembranca'),torre:ok('torre'),museu:ok('museu'),docs:ok('documentarios')};
-  this.saude();const p=G.preco,mp=p<=12?1+(12-p)*.025:Math.max(0,1-Math.pow((p-12)/28,1.2)),kd=pl.length,esp=new Set(pl.map(d=>espDe(d).id)).size,at=[...FOODS,'lembranca','torre','documentarios','banheiro_m','banheiro_f','museu','fonte','estatua','estatua2'].filter(t=>L.some(e=>e.t===t)).length,V=kd?50*Math.pow(pl.reduce((s,d,i)=>s+(i===0?5:d.hib?7:[3,5,8,10,12][Math.min(4,(espDe(d).nv||1)-1)]),0)/5,.6)*(1+.05*Math.min(at,7))*(.9+.2*G.satis/100)*(.92+.16*(this.bemMed||70)/100)*(1-.05*Math.min(6,this.nDoentes||0))*mp*Math.min(1,.8+.1*(G.dia-1)):3,w=.25;
+  this.saude();const p=G.preco,mp=p<=12?1+(12-p)*.025:Math.max(0,1-Math.pow((p-12)/28,1.2)),kd=pl.length,esp=new Set(pl.map(d=>espDe(d).id)).size,at=[...FOODS,'lembranca','torre','documentarios','banheiro_m','banheiro_f','museu','fonte','estatua','estatua2'].filter(t=>L.some(e=>e.t===t)).length,V=kd?48*(s=>s<=35?Math.pow(Math.max(s,6)/6,.8):Math.pow(35/6,.8)*Math.pow(s/35,.4))(pl.reduce((s,d,i)=>s+(i===0?6:d.hib?8:[4,6,10,12,14][Math.min(4,(espDe(d).nv||1)-1)]),0))*(1+.05*Math.min(at,7))*(.9+.2*G.satis/100)*(.92+.16*(this.bemMed||70)/100)*(1-.05*Math.min(6,this.nDoentes||0))*mp*Math.min(1,.8+.1*(G.dia-1)):3,w=.25;
   if(pl.length&&n('heli')>0&&n('portao')>0&&!G.bv5){G.bv5=1;this.sujo=1;for(let i=0;i<5;i++)this.chegou();this.toast('🎟️ Os primeiros 5 visitantes chegaram ao parque!')}
   this.demanda=V;this.rodizio(n('portao')>0&&n('heli')>0?V:0);
   const dec=L.filter(e=>DECOR.includes(e.t)).length,bm=L.some(e=>e.t==='banheiro_m'&&!this.quebrado(e)),bf=L.some(e=>e.t==='banheiro_f'&&!this.quebrado(e)),
@@ -1436,7 +1436,8 @@ const Jogador={on:false,up:null,twNear:null,x:0,z:0,yaw:0,pitch:0,vx:0,vy:0,k:{}
   addEventListener('keydown',e=>{if(e.target.tagName!=='INPUT')this.k[e.key.toLowerCase()]=1});addEventListener('keyup',e=>{this.k[e.key.toLowerCase()]=0})},
  stick(e,joy,kn){const b=joy.getBoundingClientRect(),dx=e.clientX-(b.left+b.width/2),dy=e.clientY-(b.top+b.height/2),m=Math.min(1,Math.hypot(dx,dy)/(b.width/2)),a=Math.atan2(dy,dx);
   this.vx=Math.cos(a)*m;this.vy=-Math.sin(a)*m;kn.style.transform='translate('+Math.cos(a)*m*35+'px,'+Math.sin(a)*m*35+'px)'},
- livre(x,z){const f=(a,b)=>{const i=Math.floor(a+80),j=Math.floor(b+80);if(i<0||j<0||i>159||j>159)return false;const e=Grade.ent[j*160+i];return!e||EP(e.t)||e.t==='planta'};return f(x-.25,z-.25)&&f(x+.25,z-.25)&&f(x-.25,z+.25)&&f(x+.25,z+.25)},
+ livre(x,z){const f=(a,b)=>{const i=Math.floor(a+80),j=Math.floor(b+80);if(i<0||j<0||i>159||j>159)return false;const e=Grade.ent[j*160+i];if(!e||EP(e.t)||e.t==='planta')return true;
+   if(e.t==='portao'&&e.o){const dx=a-e.o.position.x,dz=b-e.o.position.z,r=(e.r|0)&3,lx=dx*[1,0,-1,0][r]+dz*[0,1,0,-1][r];return Math.abs(lx)<1.85}return false};return f(x-.25,z-.25)&&f(x+.25,z-.25)&&f(x-.25,z+.25)&&f(x+.25,z+.25)},
  entrar(){if(est!=='parque'||this.on)return;Grade.escolher(null);Jogo.fechar();const t=Mundo.o.t;this.x=clamp(t.x,-78,78);this.z=clamp(t.z,-78,78);
   if(!this.livre(this.x,this.z)){const g=Grade.L.find(e=>e.t==='portao');this.x=g?g.o.position.x:0;this.z=g?g.o.position.z+g.d/2+1.5:40}
   for(let k=0;k<40&&!this.livre(this.x,this.z);k++)this.z+=1;
